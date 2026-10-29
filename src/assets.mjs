@@ -108,12 +108,16 @@ export function widgetJs(base, items, kind) {
 (function(){
   var BASE=${JSON.stringify(base)}, ITEMS=${data};
   function e(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  var css='.kpw{font-family:inherit}.kpw-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}@media (max-width:767px){.kpw-g{grid-template-columns:1fr}}.kpw a{text-decoration:none;color:inherit;display:block}.kpw-ph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#f2f2f2}.kpw-ph img{width:100%;height:100%;object-fit:cover;display:block}.kpw-b{position:absolute;top:10px;left:10px;background:#000;color:#fff;font-size:12px;font-weight:700;padding:3px 9px;text-transform:uppercase;letter-spacing:.04em}.kpw-b.n{background:#FF7701}.kpw h3{margin:10px 0 0;font-size:18px;font-weight:800}.kpw p{margin:2px 0 0;font-size:15px}.kpw .kpw-m{color:#666;font-size:14px}.kpw a.kpw-all{display:inline-block;margin-top:22px;background:#FF7701;color:#fff!important;padding:14px 22px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:14px}';
+  var css='.kpw{font-family:inherit}.kpw-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}@media (max-width:767px){.kpw-g{grid-template-columns:1fr}}.kpw a{text-decoration:none;color:inherit;display:block}.kpw-ph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#f2f2f2}.kpw-ph img{width:100%;height:100%;object-fit:cover;display:block}.kpw-b{position:absolute;top:10px;left:10px;background:#000;color:#fff;font-size:12px;font-weight:700;padding:3px 9px;text-transform:uppercase;letter-spacing:.04em}.kpw-b.n{background:#FF7701}.kpw h3{margin:10px 0 0;font-size:18px;font-weight:800}.kpw p{margin:2px 0 0;font-size:15px}.kpw .kpw-m{color:#666;font-size:14px}.kpw-t{margin:0 0 24px}.kpw a.kpw-all{display:inline-block;margin-top:22px;background:#FF7701;color:#fff!important;padding:14px 22px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:14px}';
   function render(el){
     var n=parseInt(el.getAttribute('data-aantal')||'3',10), city=(el.getAttribute('data-plaats')||'').toLowerCase();
     var list=ITEMS.filter(function(i){return !city||i.city.toLowerCase()===city}).slice(0,n);
     if(!list.length){el.innerHTML='<p><a href="'+BASE+'/">${allLabel}</a></p>';return}
-    var h='<style>'+css+'</style><div class="kpw"><div class="kpw-g">';
+    // In Squarespace Fluid Engine: blok over de volle breedte van de sectie laten lopen (tenzij data-breedte="blok").
+    var fb=el.closest('.fe-block');
+    if(fb&&el.getAttribute('data-breedte')!=='blok'){fb.style.gridColumnStart='2';fb.style.gridColumnEnd='-2';fb.style.height='auto';}
+    var title=el.getAttribute('data-titel');
+    var h='<style>'+css+'</style><div class="kpw">'+(title?'<h2 class="kpw-t">'+e(title)+'</h2>':'')+'<div class="kpw-g">';
     list.forEach(function(i){h+='<article><a href="'+BASE+i.url+'"><div class="kpw-ph">'+(i.img?'<img src="'+(i.img.indexOf('http')===0?i.img:BASE+i.img)+'" alt="'+e(i.street+', '+i.city)+'" loading="lazy" width="640" height="427">':'')+'<span class="kpw-b'+(i.status==='nieuw'?' n':'')+'">'+e(i.label)+'</span></div><h3>'+e(i.street)+'</h3><p>'+e(i.city)+'</p><p><strong>'+e(i.price)+'</strong></p><p class="kpw-m">'+e(i.meta)+'</p></a></article>'});
     h+='</div><a class="kpw-all" href="'+BASE+'/">${allLabel}</a></div>';
     el.innerHTML=h;
