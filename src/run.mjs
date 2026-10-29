@@ -96,6 +96,7 @@ await put('/style.css', CSS);
 await put('/favicon.svg', FAVICON);
 await put('/.nojekyll', '');
 await put('/CNAME', site.domain + '\n');
+for (const f of site.googleVerification || []) await put('/' + f, `google-site-verification: ${f}`);
 
 // Sitemap: alleen indexeerbare pagina's.
 const urls = [

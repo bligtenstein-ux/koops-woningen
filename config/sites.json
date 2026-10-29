@@ -65,7 +65,10 @@
         "button": "Get in touch",
         "href": "/en/i-want-to-rent-out"
       },
-      "includeOtherOffices": true
+      "includeOtherOffices": true,
+      "googleVerification": [
+        "googlecfe312bc9b4fe0a9.html"
+      ]
     },
     "koop": {
       "kind": "sale",
@@ -114,7 +117,10 @@
         "button": "Contact us",
         "href": "/en/contact"
       },
-      "includeOtherOffices": true
+      "includeOtherOffices": true,
+      "googleVerification": [
+        "googlecfe312bc9b4fe0a9.html"
+      ]
     }
   },
   "otherOffices": {
