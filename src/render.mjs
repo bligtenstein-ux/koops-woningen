@@ -152,6 +152,7 @@ function footer(ctx, lang) {
       ${en ? '' : `<a href="${paths.all()}">Alle woningen</a><br>`}
       ${en ? '' : `<a href="${paths.archive(s.kind)}">${s.kind === 'rent' ? 'Recent verhuurd' : 'Recent verkocht'}</a><br>`}
       ${en ? '<a href="/" hreflang="nl">Nederlands</a><br>' : `<a href="/en/" hreflang="en">${s.kind === 'rent' ? 'Homes for rent (English)' : 'Homes for sale (English)'}</a><br>`}
+      ${s.kind === 'rent' ? `<a href="${s.mainSite}${en ? '/en/housing-for-employees' : '/nl/huisvesting-medewerkers'}">${en ? 'Housing for employees' : 'Huisvesting voor medewerkers'}</a><br>` : ''}
       <a href="${ctx.sourceBase}">koopsmakelaardij.nl</a>
     </div>
     <p class="small">${en ? 'Listings are updated automatically every 30 minutes.' : 'Het aanbod wordt elk half uur automatisch bijgewerkt.'} ${en ? 'Last update' : 'Laatste update'}: ${dateLong(ctx.today, lang)}.</p>
