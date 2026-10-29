@@ -7,7 +7,7 @@ import { loadSource, normalize } from './source.mjs';
 import { readArchive, writeArchive, merge } from './archive.mjs';
 import { prepareImages } from './images.mjs';
 import * as R from './render.mjs';
-import { CSS, FAVICON, widgetJs } from './assets.mjs';
+import { CSS, FAVICON, SITE_JS, widgetJs } from './assets.mjs';
 
 const SITE = process.env.SITE || 'huur';
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
@@ -60,7 +60,24 @@ for (const l of [...active, ...closed, ...withdrawn]) {
   imgs.set(l.id, await prepareImages(l, { mode: IMAGE_MODE, imageBase: cfg.source.imageBase, cacheDir: CACHE, outDir: OUT, max: l.active ? 30 : 1 }));
 }
 
-const enIds = new Set(site.kind === 'rent' ? active.filter(R.hasOwnEnglish).map((l) => l.id) : []);
+// Engelse pagina's voor al het actieve aanbod. Tekst: eigen Engelse omschrijving, anders onze vertaling
+// (config/translations.json), anders de Nederlandse tekst met een melding.
+const enIds = new Set(active.map((l) => l.id));
+let translations = {};
+try { translations = JSON.parse(await readFile(path.join(root, 'config', 'translations.json'), 'utf8')); } catch {}
+
+// Gemiddelde doorlooptijd (alleen verhuur): zelf gemeten van online tot "onder voorbehoud"/"verhuurd",
+// alleen eigen woningen van de afgelopen 12 maanden, pas tonen vanaf 8 metingen.
+const yearAgo = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
+const durations = all.filter((l) => isOwn(l) && l.dealOn && l.online && l.dealOn >= yearAgo)
+  .map((l) => (new Date(l.dealOn) - new Date(l.online)) / 864e5).filter((d) => d >= 0);
+const avgDays = site.kind === 'rent' && durations.length >= 8 ? Math.max(1, Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)) : null;
+console.log(`  doorlooptijd: ${durations.length} metingen${avgDays ? `, gemiddeld ${avgDays} dagen` : ' (nog niet getoond)'}`);
+
+// Plaatsen voor het inschrijfformulier: waar we het meeste aanbod hebben.
+const cityN = new Map();
+for (const l of [...active, ...closed]) cityN.set(l.city, (cityN.get(l.city) || 0) + (isOwn(l) ? 2 : 1));
+const alertCities = [...cityN].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([c]) => c).sort((a, b) => a.localeCompare(b, 'nl'));
 
 // Plaatspagina's: alleen waar genoeg te tonen is.
 const placeMap = new Map();
@@ -71,7 +88,9 @@ for (const l of [...active.filter(isOwn), ...closed.filter(isOwn)]) {
 const places = [...placeMap.values()].filter((p) => p.active.length + p.closed.length >= 3).sort((a, b) => b.active.length + b.closed.length - (a.active.length + a.closed.length));
 
 const ctx = {
-  site, office: cfg.office, otherOffices: cfg.otherOffices || {}, today, imgs, enIds,
+  site, office: cfg.office, otherOffices: cfg.otherOffices || {}, today, imgs, enIds, translations, avgDays, alertCities,
+  formEndpoint: process.env.FORM_ENDPOINT ?? cfg.forms?.endpoint ?? '',
+  jsVersion: crypto.createHash('md5').update(SITE_JS).digest('hex').slice(0, 8),
   base: `https://${site.domain}`,
   sourceBase: cfg.source.detailBase,
   placeSlugs: new Set(places.map((p) => p.slug)),
@@ -87,7 +106,7 @@ async function put(rel, content) {
 const related = (l) => active.filter((x) => x.id !== l.id).sort((a, b) => isOwn(b) - isOwn(a) || (b.citySlug === l.citySlug) - (a.citySlug === l.citySlug)).slice(0, 3);
 
 await put('/', R.indexPage(ctx, { active, closed, places }));
-if (site.kind === 'rent') await put('/en/', R.indexPageEn(ctx, { active, closed }));
+await put('/en/', R.indexPageEn(ctx, { active, closed }));
 await put(R.paths.archive(site.kind), R.archivePage(ctx, closed));
 await put(R.paths.all(), R.allPage(ctx, { active, closed }));
 for (const p of places) await put(R.paths.place(p.slug), R.placePage(ctx, p));
@@ -97,6 +116,7 @@ for (const l of [...active, ...closed, ...withdrawn]) {
 }
 await put('/404.html', R.notFoundPage(ctx));
 await put('/style.css', CSS);
+await put('/site.js', SITE_JS);
 await put('/favicon.svg', FAVICON);
 await put('/.nojekyll', '');
 await put('/CNAME', site.domain + '\n');
@@ -104,7 +124,7 @@ for (const f of site.googleVerification || []) await put('/' + f, `google-site-v
 
 // Sitemap: alleen indexeerbare pagina's.
 const urls = [
-  ['/', today], ...(site.kind === 'rent' ? [['/en/', today]] : []), [R.paths.archive(site.kind), today], [R.paths.all(), today],
+  ['/', today], ['/en/', today], [R.paths.archive(site.kind), today], [R.paths.all(), today],
   ...places.map((p) => [R.paths.place(p.slug), today]),
   ...active.flatMap((l) => [[R.paths.detail(l), l.updated || today], ...(enIds.has(l.id) ? [[R.paths.detailEn(l), l.updated || today]] : [])]),
 ];
@@ -135,7 +155,8 @@ await put('/llms.txt', llms);
 
 // Widgetdata (nieuwste eerst) voor de Squarespace-homepages.
 const widgetItems = active.map((l) => ({
-  url: R.paths.detail(l), street: l.street, city: l.city, status: l.statusKey, label: R.statusLabel(l), price: R.priceLabel(l),
+  id: l.id, kind: l.kind, priceNum: l.price || null, rooms: l.rooms || null, furnishing: l.furnishing || null,
+  url: R.paths.detail(l), urlEn: enIds.has(l.id) ? R.paths.detailEn(l) : null, street: l.street, city: l.city, status: l.statusKey, label: R.statusLabel(l), price: R.priceLabel(l),
   meta: [l.surface && `${R.fmtNum(l.surface)} m²`, l.rooms && `${l.rooms} kamers`].filter(Boolean).join(' · '),
   img: imgs.get(l.id)?.[0]?.small || null,
   own: isOwn(l),

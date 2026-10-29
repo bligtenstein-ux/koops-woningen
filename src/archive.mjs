@@ -23,6 +23,12 @@ export function merge(archive, incoming, today) {
     seen.add(l.id);
     const old = archive.listings[l.id];
     const merged = { ...old, ...l, firstSeen: old?.firstSeen || today, lastSeen: today, withdrawn: false };
+    // Doorlooptijd zelf meten: eerste dag dat we een woning die we eerder vrij zagen onder voorbehoud of afgerond zien.
+    const dealNow = l.status === 5 || l.status === 2;
+    const wasFree = old && [0, 1, 6, 7].includes(old.status) && !old.withdrawn;
+    if (dealNow && wasFree && !old.dealOn) merged.dealOn = today;
+    if ([0, 1, 6, 7].includes(l.status)) delete merged.dealOn; // deal ging niet door
+
     if (!l.active) {
       // Datum van verhuur/verkoop: eerste keer dat wij hem afgerond zagen, of de wijzigingsdatum in de bron.
       merged.closedOn = old?.closedOn || (old && old.active ? today : l.updated || today);

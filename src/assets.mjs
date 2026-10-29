@@ -86,6 +86,38 @@ h3{margin:0}
 .foot{background:var(--soft);margin-top:40px;padding:36px 0;font-size:14px}
 .foot-in{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .foot-in .small{grid-column:1/-1;margin:0}
+.proof{font-weight:600;margin:0 0 14px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.kform label{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600;margin:0 0 12px}
+.kform input,.kform select,.kform textarea,.filters select{font:inherit;font-weight:400;padding:11px 12px;border:1px solid #bdbdbd;border-radius:0;background:#fff;color:var(--ink);width:100%}
+.kform input:focus,.kform select:focus,.kform textarea:focus,.filters select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.kform .btn{cursor:pointer}
+.kform .bad{border-color:#c62828}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 16px}
+.f-inline{display:flex;gap:12px;align-items:flex-end}
+.f-inline .grow{flex:1;margin:0}
+.lead-form form{max-width:720px}
+.fmsg{font-weight:600;margin:10px 0 0}
+.fmsg.ok{color:#1b5e20}.fmsg.err{color:#c62828}
+.alert-box{margin:44px 0 0;background:var(--soft);padding:32px;display:grid;grid-template-columns:1fr 1.5fr;gap:28px}
+.alert-box h2{margin-bottom:8px}
+.alert-box p{margin:0}
+.cities{border:0;padding:0;margin:0 0 12px;display:flex;flex-wrap:wrap;gap:6px 14px}
+.cities legend{font-size:14px;font-weight:600;padding:0;margin-bottom:6px}
+.kform .chk{flex-direction:row;align-items:center;gap:6px;font-weight:400;margin:0}
+.kform .chk input{width:auto}
+.filters{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;align-items:end;margin:8px 0 0;padding:16px;background:var(--soft);position:sticky;top:73px;z-index:4}
+.filters label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.filters select{padding:9px 10px}
+.fcount{grid-column:1/-1;margin:0;font-size:14px;color:var(--mute)}
+.card[hidden],.sec[hidden]{display:none}
+@media (max-width:860px){
+  .alert-box{grid-template-columns:1fr;padding:24px 20px}
+  .f3{grid-template-columns:1fr 1fr}
+  .filters{grid-template-columns:1fr 1fr;position:static}
+}
+@media (max-width:520px){.f2,.f3{grid-template-columns:1fr}.f-inline{flex-direction:column;align-items:stretch}}
 @media (max-width:860px){
   .gallery{grid-template-columns:1fr}
   .g-rest{grid-template-columns:repeat(3,1fr);max-height:none}
@@ -128,3 +160,45 @@ export function widgetJs(base, items, kind) {
 })();
 `;
 }
+
+/** Formulieren (reactie, inschrijving) en filters op /aanbod/. */
+export const SITE_JS = `(function(){
+  var B=document.body, EP=B.getAttribute('data-endpoint'), SITE=B.getAttribute('data-site'), LANG=B.getAttribute('data-lang');
+  var started=Date.now();
+  function track(name,params){try{if(window.gtag)gtag('event',name,params||{});(window.dataLayer=window.dataLayer||[]).push(Object.assign({event:name},params||{}))}catch(e){}}
+  document.querySelectorAll('form.kform').forEach(function(f){
+    f.addEventListener('submit',function(ev){
+      ev.preventDefault();
+      var msg=f.querySelector('.fmsg'), btn=f.querySelector('button[type=submit]'), ok=true;
+      f.querySelectorAll('[required]').forEach(function(i){var bad=!i.value.trim()||(i.type==='email'&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(i.value.trim()));i.classList.toggle('bad',bad);if(bad)ok=false});
+      if(!ok){msg.className='fmsg err';msg.textContent=LANG==='en'?'Please fill in the required fields.':'Vul de verplichte velden in.';return}
+      var d={type:f.getAttribute('data-type'),site:SITE,lang:LANG,t:started,page:location.href};
+      new FormData(f).forEach(function(v,k){if(k==='cities'){(d.cities=d.cities||[]).push(v)}else d[k]=v});
+      btn.disabled=true;msg.className='fmsg';msg.textContent=LANG==='en'?'Sending…':'Versturen…';
+      fetch(EP,{method:'POST',body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(r){
+        if(!r.ok)throw new Error(r.error||'fout');
+        msg.className='fmsg ok';msg.textContent=f.getAttribute('data-ok');f.reset();
+        track(d.type==='inschrijving'?'koops_inschrijving':'koops_reactie',{site:SITE});
+      }).catch(function(){msg.className='fmsg err';msg.textContent=f.getAttribute('data-err')}).finally(function(){btn.disabled=false});
+    });
+  });
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
+    if(h.indexOf('tel:')===0)track('koops_bellen',{site:SITE});else if(h.indexOf('wa.me')>-1)track('koops_whatsapp',{site:SITE});});
+  var F=document.getElementById('filters');
+  if(F){
+    var cards=[].slice.call(document.querySelectorAll('.card')), qs=new URLSearchParams(location.search);
+    [].forEach.call(F.elements,function(el){if(el.name&&qs.get(el.name))el.value=qs.get(el.name)});
+    function apply(){
+      var v={};[].forEach.call(F.elements,function(el){if(el.name)v[el.name]=el.value});
+      var n=0;
+      cards.forEach(function(c){var p=+c.dataset.price,show=(!v.status||c.dataset.state===v.status)&&(!v.plaats||c.dataset.city===v.plaats)&&(!v.min||(p&&p>=+v.min))&&(!v.max||(p&&p<=+v.max))&&(!v.kamers||+c.dataset.rooms>=+v.kamers)&&(!v.oplevering||c.dataset.furn===v.oplevering);c.hidden=!show;if(show)n++});
+      document.querySelectorAll('main .sec').forEach(function(s){var cs=s.querySelectorAll('.card');if(cs.length)s.hidden=![].some.call(cs,function(c){return!c.hidden})});
+      F.querySelector('.fcount').textContent=n+' '+(n===1?'woning':'woningen');
+      var none=document.querySelector('.fnone');if(none)none.hidden=n>0;
+      var q=new URLSearchParams();Object.keys(v).forEach(function(k){if(v[k])q.set(k,v[k])});
+      history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash);
+    }
+    F.addEventListener('change',apply);apply();
+  }
+})();
+`;
