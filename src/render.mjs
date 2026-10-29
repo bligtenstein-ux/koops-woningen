@@ -105,13 +105,15 @@ export const paths = {
   detailEn: (l) => `/en/property/${l.citySlug}/${l.slug}/`,
   place: (citySlug) => `/plaats/${citySlug}/`,
   archive: (kind) => (kind === 'rent' ? '/verhuurd/' : '/verkocht/'),
+  all: () => '/aanbod/',
 };
 
 // ---------- bouwstenen ----------
-function header(ctx, lang, altHref) {
+function header(ctx, lang, altHref, path) {
   const s = ctx.site;
   const nav = lang === 'en' ? s.navEn : s.nav;
   const aanbod = lang === 'en' ? ['Homes for rent', '/en/'] : [s.kind === 'rent' ? 'Huuraanbod' : 'Koopaanbod', '/'];
+  const allLink = lang === 'en' ? '' : `<a${path === paths.all() ? ' class="on"' : ''} href="${paths.all()}">Alle woningen</a>`;
   const langLink = s.kind === 'rent'
     ? (lang === 'en' ? `<a class="lang" href="${esc(altHref || '/')}" hreflang="nl" lang="nl">NL</a>` : `<a class="lang" href="${esc(altHref || '/en/')}" hreflang="en" lang="en">EN</a>`)
     : '';
@@ -119,7 +121,8 @@ function header(ctx, lang, altHref) {
   <div class="wrap top-in">
     <a class="logo" href="${s.mainSite}/"><img src="${s.logo}" alt="Koops Makelaardij Haarlem" width="190" height="48"></a>
     <nav aria-label="${lang === 'en' ? 'Main' : 'Hoofdmenu'}">
-      <a class="on" href="${aanbod[1]}">${aanbod[0]}</a>
+      <a${path === paths.all() ? '' : ' class="on"'} href="${aanbod[1]}">${aanbod[0]}</a>
+      ${allLink}
       ${nav.map(([t, h]) => `<a href="${s.mainSite}${h}">${esc(t)}</a>`).join('\n      ')}
       ${langLink}
     </nav>
@@ -141,6 +144,7 @@ function footer(ctx, lang) {
     <div>
       <strong>${en ? 'More from Koops' : 'Meer van Koops'}</strong><br>
       <a href="${s.mainSite}/">${esc(s.mainSite.replace('https://www.', ''))}</a><br>
+      ${en ? '' : `<a href="${paths.all()}">Alle woningen</a><br>`}
       <a href="${paths.archive(s.kind)}">${s.kind === 'rent' ? (en ? 'Recently let' : 'Recent verhuurd') : 'Recent verkocht'}</a><br>
       <a href="${ctx.sourceBase}">koopsmakelaardij.nl</a>
     </div>
@@ -240,7 +244,7 @@ ${ogImage ? `<meta property="og:image" content="${ogImage.startsWith('http') ? o
 <script type="application/ld+json">${JSON.stringify(graph).replace(/</g, '\\u003c')}</script>
 </head>
 <body>
-${header(ctx, lang, alternates ? (lang === 'en' ? alternates.nl : alternates.en) : null)}
+${header(ctx, lang, alternates ? (lang === 'en' ? alternates.nl : alternates.en) : null, path)}
 <main class="wrap">
 ${body}
 </main>
@@ -524,6 +528,59 @@ ${breadcrumbs(crumbs)}
 ${[...byYear].map(([y, items]) => `<section class="sec"><div class="sec-head"><h2>${esc(y)}</h2></div>${grid(items, ctx)}</section>`).join('\n')}
 ${ownerCta(ctx, 'nl')}`;
   return layout(ctx, { title: `${rent ? 'Verhuurde' : 'Verkochte'} woningen Haarlem e.o. | Koops Makelaardij`, description: snippet(intro), path, ld: [breadcrumbLd(ctx, crumbs)], body });
+}
+
+// Alle woningen op één pagina: eerst wat nu beschikbaar is (eigen aanbod voorop), daarna wat Koops recent
+// heeft verhuurd/verkocht. Eigen werk eerst, aangevuld met de duurdere woningen van de andere vestigingen.
+export function allPage(ctx, { active, closed }) {
+  const rent = ctx.site.kind === 'rent';
+  const own = active.filter(isOwn), others = active.filter((l) => !isOwn(l));
+  const closedSorted = [...closed].sort((a, b) => isOwn(b) - isOwn(a) || (isOwn(a) ? (b.closedOn || '').localeCompare(a.closedOn || '') : (b.price || 0) - (a.price || 0)));
+  const h1 = rent ? 'Al het huuraanbod van Koops Makelaardij' : 'Al het koopaanbod van Koops Makelaardij';
+  const lead = rent
+    ? 'Alle woningen die nu te huur zijn, plus de woningen die we onlangs hebben verhuurd.'
+    : 'Alle woningen die nu te koop zijn, plus de woningen die we onlangs hebben verkocht.';
+  const path = paths.all();
+  const crumbs = [[rent ? 'Huuraanbod' : 'Koopaanbod', '/'], ['Alle woningen', path]];
+  const nowLabel = rent ? 'Te huur' : 'Te koop', doneLabel = rent ? 'Verhuurd' : 'Verkocht';
+  const body = `
+${breadcrumbs(crumbs)}
+<section class="hero">
+  <h1>${esc(h1)}</h1>
+  <p class="lead">${esc(lead)}</p>
+  <dl class="stats">
+    <div><dt>${nowLabel}</dt><dd>${active.length}</dd></div>
+    <div><dt>${doneLabel} (recent)</dt><dd>${closed.length}</dd></div>
+    <div><dt>Google-beoordeling</dt><dd>★ ${esc(ctx.site.rating)}</dd></div>
+  </dl>
+  <p class="chips">
+    <a href="#nu">${nowLabel} (${active.length})</a>
+    <a href="#${rent ? 'verhuurd' : 'verkocht'}">${doneLabel} (${closed.length})</a>
+  </p>
+</section>
+<section class="sec" id="nu">
+  <div class="sec-head"><h2>${nowLabel} via Koops Makelaardij Haarlem</h2></div>
+  ${own.length ? grid(own, ctx) : `<p class="empty">${rent ? 'Op dit moment is al ons huuraanbod in Haarlem en omgeving verhuurd.' : 'Op dit moment hebben we in Haarlem en omgeving geen woningen te koop.'} Hieronder zie je het aanbod van onze andere vestigingen.</p>`}
+</section>
+${others.length ? `<section class="sec">
+  <div class="sec-head"><h2>${nowLabel} bij onze andere vestigingen</h2></div>
+  <p class="small">Aanbod van Koops Makelaardij in Amsterdam, Amstelveen en Leiden. Voor deze woningen helpt de betreffende vestiging je verder.</p>
+  ${grid(others, ctx)}
+</section>` : ''}
+${closed.length ? `<section class="sec" id="${rent ? 'verhuurd' : 'verkocht'}">
+  <div class="sec-head"><h2>Recent ${doneLabel.toLowerCase()} door Koops Makelaardij</h2><a href="${paths.archive(ctx.site.kind)}">Per jaar bekijken →</a></div>
+  <p class="small">${rent ? 'Woningen die wij onlangs hebben verhuurd, in Haarlem en via onze andere vestigingen.' : 'Woningen die wij onlangs hebben verkocht, in Haarlem en via onze andere vestigingen.'}</p>
+  ${grid(closedSorted, ctx)}
+</section>` : ''}
+${ownerCta(ctx, 'nl')}`;
+  return layout(ctx, {
+    title: `${rent ? 'Alle huurwoningen' : 'Alle koopwoningen'} Haarlem e.o. | Koops Makelaardij`,
+    description: `${active.length} woningen ${rent ? 'te huur' : 'te koop'} en ${closed.length} recent ${doneLabel.toLowerCase()} door Koops Makelaardij in Haarlem, Amsterdam, Amstelveen en Leiden.`,
+    path,
+    ld: [breadcrumbLd(ctx, crumbs), { '@type': 'ItemList', name: h1, numberOfItems: active.length, itemListElement: active.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: ctx.base + paths.detail(l), name: `${l.street}, ${l.city}` })) }],
+    body,
+    ogImage: active[0] && ctx.imgs.get(active[0].id)?.[0]?.large,
+  });
 }
 
 export function notFoundPage(ctx) {

@@ -89,6 +89,7 @@ const related = (l) => active.filter((x) => x.id !== l.id).sort((a, b) => isOwn(
 await put('/', R.indexPage(ctx, { active, closed, places }));
 if (site.kind === 'rent') await put('/en/', R.indexPageEn(ctx, { active, closed }));
 await put(R.paths.archive(site.kind), R.archivePage(ctx, closed));
+await put(R.paths.all(), R.allPage(ctx, { active, closed }));
 for (const p of places) await put(R.paths.place(p.slug), R.placePage(ctx, p));
 for (const l of [...active, ...closed, ...withdrawn]) {
   await put(R.paths.detail(l), R.detailPage(ctx, l, { related: related(l) }));
@@ -103,7 +104,7 @@ for (const f of site.googleVerification || []) await put('/' + f, `google-site-v
 
 // Sitemap: alleen indexeerbare pagina's.
 const urls = [
-  ['/', today], ...(site.kind === 'rent' ? [['/en/', today]] : []), [R.paths.archive(site.kind), today],
+  ['/', today], ...(site.kind === 'rent' ? [['/en/', today]] : []), [R.paths.archive(site.kind), today], [R.paths.all(), today],
   ...places.map((p) => [R.paths.place(p.slug), today]),
   ...active.flatMap((l) => [[R.paths.detail(l), l.updated || today], ...(enIds.has(l.id) ? [[R.paths.detailEn(l), l.updated || today]] : [])]),
 ];
@@ -126,6 +127,7 @@ ${places.map((p) => {
 }).join('\n')}
 
 ## Meer
+- [Alle woningen](${ctx.base}${R.paths.all()})
 - [${rent ? 'Recent verhuurd' : 'Recent verkocht'}](${ctx.base}${R.paths.archive(site.kind)})
 - [${rent ? 'Woning verhuren met Koops' : 'Woning verkopen met Koops'}](${site.mainSite}${site.ownerCta.href})
 `;
