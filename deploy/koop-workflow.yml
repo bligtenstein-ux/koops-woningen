@@ -4,7 +4,7 @@
 name: Koopaanbod bijwerken
 on:
   schedule:
-    - cron: '53 5 * * *'   # dagelijks rond 06:53 (winter) / 07:53 (zomer)
+    - cron: '22,52 * * * *'   # elk halfuur
   workflow_dispatch:
     inputs:
       force:
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .cache/img
-          key: img-koop-${{ github.run_id }}
+          key: img-koop-${{ hashFiles('data/koop.json') }}
           restore-keys: img-koop-
       - name: Aanbod ophalen en site bouwen
         run: node app/src/run.mjs

@@ -148,7 +148,7 @@ function footer(ctx, lang) {
       <a href="${paths.archive(s.kind)}">${s.kind === 'rent' ? (en ? 'Recently let' : 'Recent verhuurd') : 'Recent verkocht'}</a><br>
       <a href="${ctx.sourceBase}">koopsmakelaardij.nl</a>
     </div>
-    <p class="small">${en ? 'Listings are updated automatically every day.' : 'Het aanbod wordt dagelijks automatisch bijgewerkt.'} ${en ? 'Last update' : 'Laatste update'}: ${dateLong(ctx.today, lang)}.</p>
+    <p class="small">${en ? 'Listings are updated automatically every 30 minutes.' : 'Het aanbod wordt elk half uur automatisch bijgewerkt.'} ${en ? 'Last update' : 'Laatste update'}: ${dateLong(ctx.today, lang)}.</p>
   </div>
 </footer>`;
 }

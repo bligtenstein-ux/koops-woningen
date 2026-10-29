@@ -115,7 +115,7 @@ await put('/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${ctx.base}/sitema
 const rent = site.kind === 'rent';
 const llms = `# ${rent ? 'Huuraanbod' : 'Koopaanbod'} Koops Makelaardij Haarlem
 
-> Actueel ${rent ? 'huuraanbod' : 'koopaanbod'} van Koops Makelaardij Haarlem (Gedempte Oude Gracht 152 A, Haarlem, ${cfg.office.phone}). Dagelijks automatisch bijgewerkt. Laatste update: ${today}. Hoofdsite: ${site.mainSite}/
+> Actueel ${rent ? 'huuraanbod' : 'koopaanbod'} van Koops Makelaardij Haarlem (Gedempte Oude Gracht 152 A, Haarlem, ${cfg.office.phone}). Elk half uur automatisch bijgewerkt. Laatste update: ${today}. Hoofdsite: ${site.mainSite}/
 
 ## Nu ${rent ? 'te huur' : 'te koop'} (${active.length})
 ${active.map((l) => `- [${l.street}, ${l.city}](${ctx.base}${R.paths.detail(l)}): ${R.priceLabel(l)}${l.surface ? `, ca. ${R.fmtNum(l.surface)} m²` : ''}${l.rooms ? `, ${l.rooms} kamers` : ''}${l.furnishing ? `, ${l.furnishing.toLowerCase()}` : ''}. Status: ${R.statusLabel(l)}.${isOwn(l) ? '' : ` Aangeboden door ${ctx.otherOffices[l.officeKey]?.name || 'een andere Koops-vestiging'}.`}`).join('\n') || '- Op dit moment geen aanbod.'}
