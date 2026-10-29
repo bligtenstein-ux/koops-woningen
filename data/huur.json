@@ -49,7 +49,9 @@
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119538": {
    "id": "11119538",
@@ -116,7 +118,9 @@
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
    "withdrawn": false,
-   "closedOn": "2026-10-24"
+   "closedOn": "2026-10-24",
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119564": {
    "id": "11119564",
@@ -185,7 +189,9 @@
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
    "withdrawn": false,
-   "closedOn": "2026-10-21"
+   "closedOn": "2026-10-21",
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119577": {
    "id": "11119577",
@@ -245,7 +251,9 @@
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119579": {
    "id": "11119579",
@@ -300,7 +308,9 @@
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119580": {
    "id": "11119580",
@@ -364,7 +374,9 @@
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
    "withdrawn": false,
-   "closedOn": "2026-10-27"
+   "closedOn": "2026-10-27",
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119596": {
    "id": "11119596",
@@ -434,7 +446,9 @@
    "updated": "2026-10-26",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119599": {
    "id": "11119599",
@@ -497,7 +511,9 @@
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
    "withdrawn": false,
-   "closedOn": "2026-10-28"
+   "closedOn": "2026-10-28",
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119602": {
    "id": "11119602",
@@ -567,7 +583,9 @@
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119613": {
    "id": "11119613",
@@ -625,7 +643,9 @@
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119614": {
    "id": "11119614",
@@ -692,7 +712,9 @@
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
    "withdrawn": false,
-   "closedOn": "2026-10-29"
+   "closedOn": "2026-10-29",
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119616": {
    "id": "11119616",
@@ -748,7 +770,9 @@
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
    "withdrawn": false,
-   "closedOn": "2026-10-22"
+   "closedOn": "2026-10-22",
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119622": {
    "id": "11119622",
@@ -798,7 +822,9 @@
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   },
   "11119625": {
    "id": "11119625",
@@ -883,7 +909,9 @@
    "updated": "2026-10-29",
    "firstSeen": "2026-10-29",
    "lastSeen": "2026-10-29",
-   "withdrawn": false
+   "withdrawn": false,
+   "own": true,
+   "officeKey": "haarlem"
   }
  },
  "updated": "2026-10-29"
