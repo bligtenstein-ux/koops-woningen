@@ -1,0 +1,57 @@
+<style>
+.kb,.kb *{box-sizing:border-box}.kb{font-family:inherit;color:#000;line-height:1.6;max-width:1080px;margin:0 auto}
+.kb h1{font-weight:800;font-size:clamp(32px,5vw,54px);line-height:1.08;margin:0 0 18px;color:#000}
+.kb h2{font-weight:800;color:#FF7701;font-size:clamp(26px,3.6vw,40px);line-height:1.12;margin:0 0 16px}
+.kb h3{font-weight:800;font-size:20px;margin:0 0 6px;color:#000}
+.kb p{margin:0 0 14px;font-size:17px}.kb a{color:#FF7701;font-weight:700}
+.kb-sec{padding:40px 0}.kb-lead{font-size:19px;max-width:800px}
+.kb-answer{background:#000;color:#fff;padding:34px 36px}.kb-answer p{color:#fff;font-size:19px;margin:0}.kb-answer b{color:#FF7701}
+.kb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.kb-card{border-top:3px solid #FF7701;padding-top:16px}
+.kb-steps{counter-reset:s;list-style:none;padding:0;margin:0}.kb-steps li{counter-increment:s;position:relative;padding:0 0 14px 52px;font-size:17px;min-height:40px}
+.kb-steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:36px;height:36px;background:#FF7701;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.kb-faq details{border-bottom:1px solid #E2E2E2;padding:16px 0}.kb-faq summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none;position:relative;padding-right:30px}
+.kb-faq summary::-webkit-details-marker{display:none}.kb-faq summary::after{content:"+";position:absolute;right:0;top:-4px;font-size:26px;font-weight:700;color:#FF7701}
+.kb-faq details[open] summary::after{content:"–"}.kb-faq details p{margin:10px 0 0;font-size:16px}
+.kb-form{background:#F5F5F5;padding:36px}
+.kb-form form{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.kb-form label{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:700}
+.kb-form .full{grid-column:1/-1}
+.kb-form input,.kb-form select,.kb-form textarea{font:inherit;font-weight:400;padding:12px;border:1px solid #bdbdbd;border-radius:0;background:#fff;width:100%}
+.kb-form .hp{position:absolute;left:-9999px}
+.kb-btn{display:inline-block;background:#FF7701;color:#fff!important;border:0;padding:16px 26px;font:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:14px;cursor:pointer;text-decoration:none}
+.kb-msg{grid-column:1/-1;font-weight:700;margin:0}
+@media(max-width:767px){.kb-grid,.kb-form form{grid-template-columns:1fr}.kb-answer,.kb-form{padding:24px 20px}}
+</style>
+<div class="kb" lang="nl">
+<section class="kb-sec"><h1>Huisvesting voor je medewerkers in Haarlem en omgeving</h1><p class="kb-lead">Haal je medewerkers naar Nederland en zoek je een goede huurwoning voor ze? Koops Makelaardij helpt werkgevers, HR-teams en relocationbureaus aan passende woningen in Haarlem, Heemstede, Bloemendaal, Hoofddorp en de regio Amsterdam.</p><div class="kb-answer"><p>Je geeft ons één keer de woonwensen en het budget door. <b>Wij zoeken in ons eigen aanbod en bij onze verhuurders</b>, plannen de bezichtigingen en regelen het huurcontract en de sleuteloverdracht, in het Nederlands of Engels.</p></div>
+<p style="margin-top:22px"><a class="kb-btn" href="#aanvraag">Vraag huisvesting aan voor je medewerkers</a></p></section>
+<section class="kb-sec"><h2>Waarom bedrijven met Koops werken</h2><div class="kb-grid"><div class="kb-card"><h3>Direct toegang tot aanbod</h3><p>Wij verhuren zelf woningen in Haarlem en omgeving, en via onze vestigingen in Amsterdam, Amstelveen en Leiden. Nieuwe woningen zien jullie vaak al voordat ze breed online staan.</p></div><div class="kb-card"><h3>Eén aanspreekpunt</h3><p>Eén vaste contactpersoon voor HR, de medewerker en eventueel het relocationbureau. Alle communicatie ook in het Engels.</p></div><div class="kb-card"><h3>Gemeubileerd of gestoffeerd</h3><p>Veel van onze huurwoningen zijn gemeubileerd of gestoffeerd, zodat een medewerker direct kan wonen.</p></div><div class="kb-card"><h3>Volgens de regels</h3><p>Huurcontracten volgens het Nederlandse huurrecht, met een digitaal inspectierapport bij de sleuteloverdracht. Zo weet iedereen waar hij aan toe is.</p></div></div></section>
+<section class="kb-sec"><h2>Zo werkt het</h2><ol class="kb-steps"><li>Je stuurt de aanvraag: aantal medewerkers, startdatum, budget en voorkeursplaatsen.</li><li>We bellen binnen één werkdag om de wensen door te nemen.</li><li>Je krijgt passende woningen uit ons aanbod en netwerk voorgesteld.</li><li>Bezichtigingen met de medewerker, op locatie of via video.</li><li>Huurcontract (op naam van de medewerker of, in overleg met de verhuurder, van het bedrijf).</li><li>Sleuteloverdracht met inspectierapport en uitleg over de woning.</li></ol></section>
+<section class="kb-sec" id="aanvraag"><div class="kb-form"><h2>Vraag huisvesting aan voor je medewerkers</h2><p>Vul het formulier in, dan nemen we binnen één werkdag contact met je op. Liever bellen? 023 532 9817.</p>
+<form id="kb-form" novalidate>
+<div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+<label>Bedrijf *<input name="company" required autocomplete="organization"></label>
+<label>Naam *<input name="name" required autocomplete="name"></label>
+<label>E-mail *<input name="email" type="email" required autocomplete="email"></label>
+<label>Telefoon *<input name="phone" type="tel" required autocomplete="tel"></label>
+<label>Aantal medewerkers<select name="count"><option>1</option><option>2-5</option><option>6-10</option><option>10+</option></select></label>
+<label>Per wanneer<input name="from" type="month"></label>
+<label>Budget per woning per maand<select name="budget"><option value="">–</option><option>&lt; € 2.000</option><option>€ 2.000 – 3.000</option><option>€ 3.000 – 4.000</option><option>€ 4.000 – 5.000</option><option>&gt; € 5.000</option></select></label>
+<label>Voorkeursplaats(en)<input name="cities" placeholder="Haarlem, Heemstede, Amsterdam…"></label>
+<label class="full">Toelichting (gezinssituatie, gemeubileerd, looptijd)<textarea name="message" rows="4"></textarea></label>
+<div class="full"><button class="kb-btn" type="submit">Aanvraag versturen</button></div>
+<p class="kb-msg" id="kb-msg" role="status" aria-live="polite"></p>
+</form></div></section>
+<section class="kb-sec kb-faq"><h2>Veelgestelde vragen</h2><details><summary>Wat kost het voor ons als werkgever?</summary><p>Voor woningen die wij namens een verhuurder aanbieden, betalen huurder en werkgever geen bemiddelingskosten. Zoek je hulp buiten ons aanbod, dan bespreken we vooraf de mogelijkheden.</p></details><details><summary>Kan het huurcontract op naam van ons bedrijf?</summary><p>Dat kan in overleg met de verhuurder. Vaak staat het contract op naam van de medewerker en betaalt de werkgever de huur of een deel ervan.</p></details><details><summary>Hebben jullie gemeubileerde woningen?</summary><p>Ja, een groot deel van ons huuraanbod is gemeubileerd of gestoffeerd. Geef in de aanvraag aan wat je medewerker nodig heeft.</p></details><details><summary>Werken jullie samen met relocationbureaus?</summary><p>Ja. We stemmen bezichtigingen en het contract graag af met jullie relocationbureau, zodat de medewerker één soepel traject heeft.</p></details><details><summary>In welke plaatsen zoeken jullie?</summary><p>Vooral Haarlem, Heemstede, Bloemendaal, Zandvoort, Hoofddorp en omgeving. Via onze vestigingen ook Amsterdam, Amstelveen en Leiden.</p></details><p style="margin-top:22px">Bekijk ook <a href="https://woningen.verhuurmetkoops.nl/aanbod/">ons actuele huuraanbod</a> of lees over <a href="/nl/verhuren-aan-expats">verhuren aan expats</a>.</p></section>
+</div>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Wat kost het voor ons als werkgever?","acceptedAnswer":{"@type":"Answer","text":"Voor woningen die wij namens een verhuurder aanbieden, betalen huurder en werkgever geen bemiddelingskosten. Zoek je hulp buiten ons aanbod, dan bespreken we vooraf de mogelijkheden."}},{"@type":"Question","name":"Kan het huurcontract op naam van ons bedrijf?","acceptedAnswer":{"@type":"Answer","text":"Dat kan in overleg met de verhuurder. Vaak staat het contract op naam van de medewerker en betaalt de werkgever de huur of een deel ervan."}},{"@type":"Question","name":"Hebben jullie gemeubileerde woningen?","acceptedAnswer":{"@type":"Answer","text":"Ja, een groot deel van ons huuraanbod is gemeubileerd of gestoffeerd. Geef in de aanvraag aan wat je medewerker nodig heeft."}},{"@type":"Question","name":"Werken jullie samen met relocationbureaus?","acceptedAnswer":{"@type":"Answer","text":"Ja. We stemmen bezichtigingen en het contract graag af met jullie relocationbureau, zodat de medewerker één soepel traject heeft."}},{"@type":"Question","name":"In welke plaatsen zoeken jullie?","acceptedAnswer":{"@type":"Answer","text":"Vooral Haarlem, Heemstede, Bloemendaal, Zandvoort, Hoofddorp en omgeving. Via onze vestigingen ook Amsterdam, Amstelveen en Leiden."}}]}</script>
+<script>
+(function(){var f=document.getElementById('kb-form'),m=document.getElementById('kb-msg'),t0=Date.now();if(!f)return;
+f.addEventListener('submit',function(e){e.preventDefault();var ok=true;[].forEach.call(f.querySelectorAll('[required]'),function(i){var b=!i.value.trim();i.style.borderColor=b?'#c62828':'';if(b)ok=false});
+if(!ok){m.style.color='#c62828';m.textContent="Vul de verplichte velden in.";return}
+var d={type:'bedrijf',lang:'nl',t:t0,page:location.href};new FormData(f).forEach(function(v,k){d[k]=v});
+var btn=f.querySelector('button');btn.disabled=true;m.style.color='';m.textContent='…';
+fetch("https://script.google.com/macros/s/AKfycbzAvTeD1F3BbQFS0PEGO1wAF6iyn6101g_v-YlWuP2FeAIJk0K4lyFtj3Vn--eMOK84vQ/exec",{method:'POST',body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(r){if(!r.ok)throw 0;m.style.color='#1b5e20';m.textContent="Bedankt! We hebben je aanvraag ontvangen en nemen binnen één werkdag contact op.";f.reset();try{(window.dataLayer=window.dataLayer||[]).push({event:'koops_bedrijf_aanvraag'})}catch(x){}})
+.catch(function(){m.style.color='#c62828';m.textContent="Versturen is niet gelukt. Bel 023 532 9817 of mail haarlem@koopsmakelaardij.nl."}).finally(function(){btn.disabled=false})});})();
+</script>

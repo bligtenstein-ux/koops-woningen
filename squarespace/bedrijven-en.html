@@ -1,0 +1,57 @@
+<style>
+.kb,.kb *{box-sizing:border-box}.kb{font-family:inherit;color:#000;line-height:1.6;max-width:1080px;margin:0 auto}
+.kb h1{font-weight:800;font-size:clamp(32px,5vw,54px);line-height:1.08;margin:0 0 18px;color:#000}
+.kb h2{font-weight:800;color:#FF7701;font-size:clamp(26px,3.6vw,40px);line-height:1.12;margin:0 0 16px}
+.kb h3{font-weight:800;font-size:20px;margin:0 0 6px;color:#000}
+.kb p{margin:0 0 14px;font-size:17px}.kb a{color:#FF7701;font-weight:700}
+.kb-sec{padding:40px 0}.kb-lead{font-size:19px;max-width:800px}
+.kb-answer{background:#000;color:#fff;padding:34px 36px}.kb-answer p{color:#fff;font-size:19px;margin:0}.kb-answer b{color:#FF7701}
+.kb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.kb-card{border-top:3px solid #FF7701;padding-top:16px}
+.kb-steps{counter-reset:s;list-style:none;padding:0;margin:0}.kb-steps li{counter-increment:s;position:relative;padding:0 0 14px 52px;font-size:17px;min-height:40px}
+.kb-steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:36px;height:36px;background:#FF7701;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.kb-faq details{border-bottom:1px solid #E2E2E2;padding:16px 0}.kb-faq summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none;position:relative;padding-right:30px}
+.kb-faq summary::-webkit-details-marker{display:none}.kb-faq summary::after{content:"+";position:absolute;right:0;top:-4px;font-size:26px;font-weight:700;color:#FF7701}
+.kb-faq details[open] summary::after{content:"–"}.kb-faq details p{margin:10px 0 0;font-size:16px}
+.kb-form{background:#F5F5F5;padding:36px}
+.kb-form form{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.kb-form label{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:700}
+.kb-form .full{grid-column:1/-1}
+.kb-form input,.kb-form select,.kb-form textarea{font:inherit;font-weight:400;padding:12px;border:1px solid #bdbdbd;border-radius:0;background:#fff;width:100%}
+.kb-form .hp{position:absolute;left:-9999px}
+.kb-btn{display:inline-block;background:#FF7701;color:#fff!important;border:0;padding:16px 26px;font:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:14px;cursor:pointer;text-decoration:none}
+.kb-msg{grid-column:1/-1;font-weight:700;margin:0}
+@media(max-width:767px){.kb-grid,.kb-form form{grid-template-columns:1fr}.kb-answer,.kb-form{padding:24px 20px}}
+</style>
+<div class="kb" lang="en">
+<section class="kb-sec"><h1>Housing for your employees in Haarlem and the surrounding area</h1><p class="kb-lead">Relocating employees to the Netherlands and looking for a good rental home for them? Koops Makelaardij helps employers, HR teams and relocation agencies find suitable homes in Haarlem, Heemstede, Bloemendaal, Hoofddorp and the Amsterdam region.</p><div class="kb-answer"><p>You tell us the housing needs and budget once. <b>We search our own listings and our network of landlords</b>, arrange the viewings and take care of the rental agreement and key handover, in English or Dutch.</p></div>
+<p style="margin-top:22px"><a class="kb-btn" href="#aanvraag">Request housing for your employees</a></p></section>
+<section class="kb-sec"><h2>Why companies work with Koops</h2><div class="kb-grid"><div class="kb-card"><h3>Direct access to homes</h3><p>We let homes in Haarlem and the surrounding area ourselves, and through our offices in Amsterdam, Amstelveen and Leiden. You often see new homes before they are widely advertised.</p></div><div class="kb-card"><h3>One point of contact</h3><p>One dedicated contact person for HR, the employee and the relocation agency, if you work with one. All communication in English.</p></div><div class="kb-card"><h3>Furnished or upholstered</h3><p>Many of our rental homes are furnished or upholstered, so your employee can move in right away.</p></div><div class="kb-card"><h3>By the book</h3><p>Rental agreements under Dutch tenancy law, with a digital inspection report at key handover, so everyone knows where they stand.</p></div></div></section>
+<section class="kb-sec"><h2>How it works</h2><ol class="kb-steps"><li>Send us your request: number of employees, start date, budget and preferred locations.</li><li>We call you within one working day to discuss the requirements.</li><li>We propose suitable homes from our listings and network.</li><li>Viewings with the employee, in person or by video.</li><li>Rental agreement in the employee’s name or, if the landlord agrees, in the company’s name.</li><li>Key handover with an inspection report and a walk-through of the home.</li></ol></section>
+<section class="kb-sec" id="aanvraag"><div class="kb-form"><h2>Request housing for your employees</h2><p>Fill in the form and we will contact you within one working day. Prefer to call? +31 23 532 9817.</p>
+<form id="kb-form" novalidate>
+<div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+<label>Company *<input name="company" required autocomplete="organization"></label>
+<label>Name *<input name="name" required autocomplete="name"></label>
+<label>Email *<input name="email" type="email" required autocomplete="email"></label>
+<label>Phone *<input name="phone" type="tel" required autocomplete="tel"></label>
+<label>Number of employees<select name="count"><option>1</option><option>2-5</option><option>6-10</option><option>10+</option></select></label>
+<label>Starting from<input name="from" type="month"></label>
+<label>Budget per home per month<select name="budget"><option value="">–</option><option>&lt; € 2.000</option><option>€ 2.000 – 3.000</option><option>€ 3.000 – 4.000</option><option>€ 4.000 – 5.000</option><option>&gt; € 5.000</option></select></label>
+<label>Preferred location(s)<input name="cities" placeholder="Haarlem, Heemstede, Amsterdam…"></label>
+<label class="full">Details (household, furnished, length of stay)<textarea name="message" rows="4"></textarea></label>
+<div class="full"><button class="kb-btn" type="submit">Send request</button></div>
+<p class="kb-msg" id="kb-msg" role="status" aria-live="polite"></p>
+</form></div></section>
+<section class="kb-sec kb-faq"><h2>Frequently asked questions</h2><details><summary>What does it cost us as an employer?</summary><p>For homes we offer on behalf of a landlord, neither the tenant nor the employer pays agency fees. If you need help beyond our listings, we will discuss the options with you first.</p></details><details><summary>Can the rental agreement be in our company’s name?</summary><p>That is possible if the landlord agrees. Often the agreement is in the employee’s name and the employer pays all or part of the rent.</p></details><details><summary>Do you have furnished homes?</summary><p>Yes, a large part of our rental listings is furnished or upholstered. Let us know in your request what your employee needs.</p></details><details><summary>Do you work with relocation agencies?</summary><p>Yes. We are happy to coordinate viewings and the contract with your relocation agency, so your employee has one smooth process.</p></details><details><summary>Which areas do you cover?</summary><p>Mainly Haarlem, Heemstede, Bloemendaal, Zandvoort, Hoofddorp and the surrounding area, and through our other offices also Amsterdam, Amstelveen and Leiden.</p></details><p style="margin-top:22px">Also see <a href="https://woningen.verhuurmetkoops.nl/en/">our current rental listings</a>.</p></section>
+</div>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does it cost us as an employer?","acceptedAnswer":{"@type":"Answer","text":"For homes we offer on behalf of a landlord, neither the tenant nor the employer pays agency fees. If you need help beyond our listings, we will discuss the options with you first."}},{"@type":"Question","name":"Can the rental agreement be in our company’s name?","acceptedAnswer":{"@type":"Answer","text":"That is possible if the landlord agrees. Often the agreement is in the employee’s name and the employer pays all or part of the rent."}},{"@type":"Question","name":"Do you have furnished homes?","acceptedAnswer":{"@type":"Answer","text":"Yes, a large part of our rental listings is furnished or upholstered. Let us know in your request what your employee needs."}},{"@type":"Question","name":"Do you work with relocation agencies?","acceptedAnswer":{"@type":"Answer","text":"Yes. We are happy to coordinate viewings and the contract with your relocation agency, so your employee has one smooth process."}},{"@type":"Question","name":"Which areas do you cover?","acceptedAnswer":{"@type":"Answer","text":"Mainly Haarlem, Heemstede, Bloemendaal, Zandvoort, Hoofddorp and the surrounding area, and through our other offices also Amsterdam, Amstelveen and Leiden."}}]}</script>
+<script>
+(function(){var f=document.getElementById('kb-form'),m=document.getElementById('kb-msg'),t0=Date.now();if(!f)return;
+f.addEventListener('submit',function(e){e.preventDefault();var ok=true;[].forEach.call(f.querySelectorAll('[required]'),function(i){var b=!i.value.trim();i.style.borderColor=b?'#c62828':'';if(b)ok=false});
+if(!ok){m.style.color='#c62828';m.textContent="Please fill in the required fields.";return}
+var d={type:'bedrijf',lang:'en',t:t0,page:location.href};new FormData(f).forEach(function(v,k){d[k]=v});
+var btn=f.querySelector('button');btn.disabled=true;m.style.color='';m.textContent='…';
+fetch("https://script.google.com/macros/s/AKfycbzAvTeD1F3BbQFS0PEGO1wAF6iyn6101g_v-YlWuP2FeAIJk0K4lyFtj3Vn--eMOK84vQ/exec",{method:'POST',body:JSON.stringify(d)}).then(function(r){return r.json()}).then(function(r){if(!r.ok)throw 0;m.style.color='#1b5e20';m.textContent="Thank you! We have received your request and will contact you within one working day.";f.reset();try{(window.dataLayer=window.dataLayer||[]).push({event:'koops_bedrijf_aanvraag'})}catch(x){}})
+.catch(function(){m.style.color='#c62828';m.textContent="Sending failed. Please call +31 23 532 9817 or email haarlem@koopsmakelaardij.nl."}).finally(function(){btn.disabled=false})});})();
+</script>
