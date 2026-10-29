@@ -54,7 +54,11 @@ jobs:
           git config user.name "koops-woningen-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
-          git diff --cached --quiet || (git commit -m "Archief koop bijgewerkt" && git push)
+          git diff --cached --quiet && exit 0
+          git commit -m "Archief koop bijgewerkt"
+          # Iemand anders kan intussen iets hebben gepusht: eerst bijwerken, dan opnieuw proberen.
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 5; done
+          exit 1
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
