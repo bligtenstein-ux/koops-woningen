@@ -1,0 +1,82 @@
+{
+  "source": {
+    "url": "https://www.koopsmakelaardij.nl/zoeken/haarlem",
+    "detailBase": "https://www.koopsmakelaardij.nl/",
+    "imageBase": "https://koopsmakelaardij.nl/media/image/original/",
+    "region": "haarlem"
+  },
+  "office": {
+    "name": "Koops Makelaardij Haarlem",
+    "legalName": "Koops Makelaardij Haarlem B.V.",
+    "street": "Gedempte Oude Gracht 152 A",
+    "postalCode": "2011 GX",
+    "city": "Haarlem",
+    "phone": "023 532 9817",
+    "phoneIntl": "+31235329817",
+    "whatsapp": "31650500056",
+    "email": "haarlem@koopsmakelaardij.nl",
+    "kvk": "56794886"
+  },
+  "sites": {
+    "huur": {
+      "kind": "rent",
+      "domain": "woningen.verhuurmetkoops.nl",
+      "mainSite": "https://www.verhuurmetkoops.nl",
+      "orgId": "https://www.verhuurmetkoops.nl/#organisatie",
+      "logo": "https://images.squarespace-cdn.com/content/v1/6321bfa16f0e8a5c85ca5e30/655f08ca-fa66-43f8-b5a1-78375e50655f/Koops+Makelaardij+Haarlem.jpg?format=500w",
+      "rating": "4,7",
+      "nav": [
+        ["Verhuren met Koops", "/nl/onze-diensten/verhuur"],
+        ["Kosten", "/nl/kosten-verhuurmakelaar"],
+        ["Verhuren aan expats", "/nl/verhuren-aan-expats"],
+        ["Contact", "/nl/overons/contact"]
+      ],
+      "navEn": [
+        ["Renting out with Koops", "/en/i-want-to-rent-out"],
+        ["Contact", "/en/about/contact"]
+      ],
+      "ownerCta": {
+        "title": "Ook je woning verhuren?",
+        "text": "Wij verhuren woningen in Haarlem en omgeving gemiddeld binnen 1 week, vaak aan gescreende expats. Je betaalt één maand huur inclusief btw, alleen bij succes.",
+        "button": "Plan een gratis kennismaking",
+        "href": "/nl/onze-diensten/verhuur#aanvraag"
+      },
+      "ownerCtaEn": {
+        "title": "Want to rent out your home?",
+        "text": "We let homes in Haarlem and the surrounding area in about one week on average, often to screened expats. Our fee is one month's rent including VAT, only when your home is let.",
+        "button": "Get in touch",
+        "href": "/en/i-want-to-rent-out"
+      }
+    },
+    "koop": {
+      "kind": "sale",
+      "domain": "woningen.verkoopmetkoops.nl",
+      "mainSite": "https://www.verkoopmetkoops.nl",
+      "orgId": "https://www.verkoopmetkoops.nl/#organisatie",
+      "logo": "https://images.squarespace-cdn.com/content/v1/64ad371e560d704325acbb6a/b421681e-fc5a-4069-a38e-5c06d9fbb844/koops+logo+black.png?format=500w",
+      "rating": "4,6",
+      "nav": [
+        ["Verkopen", "/nl/diensten/verkoop"],
+        ["Aankoop", "/nl/diensten/aankoop"],
+        ["Waardebepaling", "/nl/gratis-waardebepaling"],
+        ["Contact", "/nl/contact"]
+      ],
+      "navEn": [
+        ["Services", "/en/services"],
+        ["Contact", "/en/contact"]
+      ],
+      "ownerCta": {
+        "title": "Ook je woning verkopen?",
+        "text": "Verkopen voor een vast tarief vanaf € 3.950 inclusief btw. Verkopen én kopen via Koops? Dan vervallen de opstartkosten.",
+        "button": "Gratis waardebepaling",
+        "href": "/nl/gratis-waardebepaling"
+      },
+      "ownerCtaEn": {
+        "title": "Selling your home?",
+        "text": "Sell for a fixed fee from € 3,950 including VAT, with one team for both your sale and your purchase.",
+        "button": "Contact us",
+        "href": "/en/contact"
+      }
+    }
+  }
+}

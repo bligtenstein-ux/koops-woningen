@@ -1,0 +1,13 @@
+{
+  "name": "koops-woningen",
+  "private": true,
+  "type": "module",
+  "description": "Synchroniseert het aanbod van Koops Makelaardij Haarlem naar woningen.verhuurmetkoops.nl en woningen.verkoopmetkoops.nl",
+  "scripts": {
+    "build": "node src/run.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}

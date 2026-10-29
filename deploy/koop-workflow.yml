@@ -1,0 +1,70 @@
+# Hoort in de repository koops-woningen-koop als .github/workflows/koop.yml.
+# Die repository bevat alleen deze workflow en het archief (data/koop.json);
+# de code komt uit de openbare repository koops-woningen.
+name: Koopaanbod bijwerken
+on:
+  schedule:
+    - cron: '47 * * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Ook publiceren als er ineens 0 actieve woningen zijn (alleen als dat klopt)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: koop
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SITE: koop
+      DATA_DIR: ${{ github.workspace }}/data
+      OUT: ${{ github.workspace }}/dist
+      CACHE: ${{ github.workspace }}/.cache/img
+      FORCE: ${{ inputs.force && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: bligtenstein-ux/koops-woningen
+          path: app
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+        working-directory: app
+      - uses: actions/cache@v4
+        with:
+          path: .cache/img
+          key: img-koop-${{ github.run_id }}
+          restore-keys: img-koop-
+      - name: Aanbod ophalen en site bouwen
+        run: node app/src/run.mjs
+      - name: Archief bewaren
+        run: |
+          git config user.name "koops-woningen-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || (git commit -m "Archief koop bijgewerkt" && git push)
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
