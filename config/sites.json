@@ -68,7 +68,11 @@
       "includeOtherOffices": true,
       "googleVerification": [
         "googlecfe312bc9b4fe0a9.html"
-      ]
+      ],
+      "premiumClosed": {
+        "minPrice": 2750,
+        "months": 18
+      }
     },
     "koop": {
       "kind": "sale",
@@ -120,7 +124,11 @@
       "includeOtherOffices": true,
       "googleVerification": [
         "googlecfe312bc9b4fe0a9.html"
-      ]
+      ],
+      "premiumClosed": {
+        "minPrice": 750000,
+        "months": 18
+      }
     }
   },
   "otherOffices": {

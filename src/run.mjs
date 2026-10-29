@@ -26,9 +26,12 @@ const raw = await loadSource({ url: cfg.source.url, fixture: process.env.FIXTURE
 const normalized = raw.map((i) => normalize(i, cfg.source.region, { allOffices: true })).filter(Boolean);
 const ownAll = normalized.filter((l) => l.own);
 if (!ownAll.length) throw new Error('Bron bevat 0 woningen van de vestiging Haarlem: synchronisatie afgebroken.');
-// Eigen aanbod (actief + afgerond). Bij includeOtherOffices ook het actieve aanbod van de andere vestigingen;
-// hun verkochte woningen komen niet in ons archief.
-const incoming = normalized.filter((l) => l.kind === site.kind && (l.own || (site.includeOtherOffices && l.active)));
+// Eigen aanbod (actief + afgerond). Bij includeOtherOffices ook het actieve aanbod van de andere vestigingen,
+// plus hun recent verkochte/verhuurde woningen in het hogere segment (vertrouwen: "dit verkoopt Koops").
+const prem = site.premiumClosed || null;
+const sinceDate = prem ? new Date(Date.now() - prem.months * 30.5 * 864e5).toISOString().slice(0, 10) : '9999';
+const premiumOk = (l) => Boolean(prem && l.price >= prem.minPrice && (l.closedOn || l.updated || '') >= sinceDate);
+const incoming = normalized.filter((l) => l.kind === site.kind && (l.own || (site.includeOtherOffices && (l.active || premiumOk(l)))));
 console.log(`  bron: ${raw.length} objecten, Haarlem: ${ownAll.length}, ${site.kind === 'rent' ? 'huur' : 'koop'}: ${incoming.length} (waarvan andere vestigingen: ${incoming.filter((l) => !l.own).length})`);
 
 const archiveFile = path.join(DATA_DIR, `${SITE}.json`);
@@ -44,7 +47,7 @@ const isOwn = (l) => l.own !== false;
 const byOnline = (a, b) => (b.online || '').localeCompare(a.online || '') || Number(b.id) - Number(a.id);
 // Eigen aanbod altijd bovenaan, daarna de andere vestigingen; binnen elke groep de nieuwste eerst.
 const active = all.filter((l) => l.active).sort((a, b) => isOwn(b) - isOwn(a) || byOnline(a, b));
-const closed = all.filter((l) => !l.active && !l.withdrawn && isOwn(l)).sort((a, b) => (b.closedOn || '').localeCompare(a.closedOn || '') || byOnline(a, b));
+const closed = all.filter((l) => !l.active && !l.withdrawn && (isOwn(l) || premiumOk(l))).sort((a, b) => (b.closedOn || '').localeCompare(a.closedOn || '') || byOnline(a, b));
 const withdrawn = all.filter((l) => l.withdrawn);
 console.log(`  actief: ${active.length}, archief: ${closed.length}, ingetrokken: ${withdrawn.length}`);
 
@@ -61,7 +64,7 @@ const enIds = new Set(site.kind === 'rent' ? active.filter(R.hasOwnEnglish).map(
 
 // Plaatspagina's: alleen waar genoeg te tonen is.
 const placeMap = new Map();
-for (const l of [...active.filter(isOwn), ...closed]) {
+for (const l of [...active.filter(isOwn), ...closed.filter(isOwn)]) {
   if (!placeMap.has(l.citySlug)) placeMap.set(l.citySlug, { city: l.city, slug: l.citySlug, active: [], closed: [] });
   placeMap.get(l.citySlug)[l.active ? 'active' : 'closed'].push(l);
 }

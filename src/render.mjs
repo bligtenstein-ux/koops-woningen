@@ -254,10 +254,13 @@ ${footer(ctx, lang)}
 export function indexPage(ctx, { active, closed, places }) {
   const rent = ctx.site.kind === 'rent';
   const h1 = rent ? 'Huurwoningen van Koops Makelaardij in Haarlem en omgeving' : 'Woningen te koop bij Koops Makelaardij in Haarlem en omgeving';
-  const intro = rent
-    ? (() => { const o = active.filter(isOwn).length, x = active.length - o; return `Dit is het actuele huuraanbod van Koops Makelaardij Haarlem: ${o} ${o === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan${x ? `, gevolgd door ${x} ${x === 1 ? 'woning' : 'woningen'} van onze vestigingen in Amsterdam, Amstelveen en Leiden` : ''}. Veel woningen zijn gemeubileerd en geschikt voor expats.`; })()
-    : (() => { const o = active.filter(isOwn).length, x = active.length - o; return `Dit is het actuele koopaanbod van Koops Makelaardij Haarlem: ${o} ${o === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan${x ? `, gevolgd door ${x} ${x === 1 ? 'woning' : 'woningen'} van onze vestigingen in Amsterdam, Amstelveen en Leiden` : ''}.`; })();
-  const recent = closed.slice(0, 6);
+  const intro = rent ? 'Dit is het actuele huuraanbod van Koops Makelaardij Haarlem:' : 'Dit is het actuele koopaanbod van Koops Makelaardij Haarlem:';
+  const metaDesc = rent
+    ? `Actuele huurwoningen van Koops Makelaardij in Haarlem en omgeving (${active.length}), de nieuwste bovenaan, plus recent verhuurde woningen.`
+    : `Actuele koopwoningen van Koops Makelaardij in Haarlem en omgeving (${active.length}), de nieuwste bovenaan, plus recent verkochte woningen.`;
+  // Recent afgerond: eerst ons eigen werk (nieuwste eerst), aangevuld met de duurdere woningen van de andere vestigingen.
+  const ownClosed = closed.filter(isOwn).slice(0, 6);
+  const recent = [...ownClosed, ...closed.filter((l) => !isOwn(l)).sort((a, b) => (b.price || 0) - (a.price || 0)).slice(0, 12 - ownClosed.length)];
   const own = active.filter(isOwn), others = active.filter((l) => !isOwn(l));
   const ld = [
     breadcrumbLd(ctx, [[rent ? 'Huuraanbod' : 'Koopaanbod', '/']]),
@@ -273,19 +276,21 @@ export function indexPage(ctx, { active, closed, places }) {
   <h2 class="${others.length ? '' : 'sr'}">${rent ? 'Te huur via Koops Makelaardij Haarlem' : 'Te koop via Koops Makelaardij Haarlem'}</h2>
   ${own.length ? grid(own, ctx) : `<p class="empty">${rent ? 'Op dit moment is al ons huuraanbod verhuurd.' : 'Op dit moment hebben we in Haarlem en omgeving geen woningen te koop.'} Bekijk ook <a href="${ctx.sourceBase}zoeken">het aanbod van alle Koops-vestigingen</a>.</p>`}
 </section>
+${recent.length ? `<section class="sec">
+  <div class="sec-head"><h2>${rent ? 'Recent verhuurd' : 'Recent verkocht'}</h2><a href="${paths.archive(ctx.site.kind)}">${rent ? 'Alle verhuurde woningen' : 'Alle verkochte woningen'} →</a></div>
+  <p class="small">${rent ? 'Een greep uit de woningen die Koops Makelaardij onlangs heeft verhuurd, in Haarlem en via onze andere vestigingen.' : 'Een greep uit de woningen die Koops Makelaardij onlangs heeft verkocht, in Haarlem en via onze andere vestigingen.'}</p>
+  ${grid(recent, ctx)}
+</section>` : ''}
 ${others.length ? `<section class="sec">
   <div class="sec-head"><h2>${rent ? 'Te huur' : 'Te koop'} bij onze andere vestigingen</h2></div>
   <p class="small">Aanbod van Koops Makelaardij in Amsterdam, Amstelveen en Leiden. Voor deze woningen helpt de betreffende vestiging je verder.</p>
   ${grid(others, ctx)}
 </section>` : ''}
-${recent.length ? `<section class="sec">
-  <div class="sec-head"><h2>${rent ? 'Recent verhuurd' : 'Recent verkocht'}</h2><a href="${paths.archive(ctx.site.kind)}">${rent ? 'Alle verhuurde woningen' : 'Alle verkochte woningen'} →</a></div>
-  ${grid(recent, ctx)}
-</section>` : ''}
+
 ${ownerCta(ctx, 'nl')}`;
   return layout(ctx, {
     title: rent ? 'Huurwoningen Haarlem e.o. | Koops Makelaardij' : 'Woningen te koop Haarlem e.o. | Koops Makelaardij',
-    description: snippet(intro),
+    description: metaDesc,
     path: '/',
     alternates: rent ? { nl: '/', en: '/en/' } : null,
     ld,
@@ -501,7 +506,7 @@ ${ownerCta(ctx, 'nl', rent ? `Je woning verhuren in ${city}?` : `Je woning verko
 
 export function archivePage(ctx, closed) {
   const rent = ctx.site.kind === 'rent';
-  const h1 = rent ? 'Recent verhuurd door Koops Makelaardij Haarlem' : 'Recent verkocht door Koops Makelaardij Haarlem';
+  const h1 = rent ? 'Recent verhuurd door Koops Makelaardij' : 'Recent verkocht door Koops Makelaardij';
   const byYear = new Map();
   for (const l of closed) {
     const y = (l.closedOn || '').slice(0, 4) || 'Eerder';
@@ -509,8 +514,8 @@ export function archivePage(ctx, closed) {
     byYear.get(y).push(l);
   }
   const intro = rent
-    ? `Een overzicht van ${closed.length} woningen die wij in Haarlem en omgeving hebben verhuurd, de meest recente bovenaan.`
-    : `Een overzicht van ${closed.length} woningen die wij in Haarlem en omgeving hebben verkocht, de meest recente bovenaan.`;
+    ? `Een overzicht van ${closed.length} woningen die Koops Makelaardij heeft verhuurd, in Haarlem en omgeving en via onze andere vestigingen. De meest recente staan bovenaan.`
+    : `Een overzicht van ${closed.length} woningen die Koops Makelaardij heeft verkocht, in Haarlem en omgeving en via onze andere vestigingen. De meest recente staan bovenaan.`;
   const path = paths.archive(ctx.site.kind);
   const crumbs = [[rent ? 'Huuraanbod' : 'Koopaanbod', '/'], [rent ? 'Verhuurd' : 'Verkocht', path]];
   const body = `
