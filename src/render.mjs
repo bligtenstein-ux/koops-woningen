@@ -67,9 +67,12 @@ export function stripHeaderLine(text, l) {
 
 /** Sommige advertenties hebben de Engelse tekst onder "- English -" in de Nederlandse omschrijving staan. */
 export function splitBilingual(text) {
-  const m = text.match(/^\s*-*\s*(?:english(?: below| version)?|in english)\s*-*\s*$/im);
-  if (!m) return { nl: text, en: '' };
-  return { nl: text.slice(0, m.index).trim(), en: text.slice(m.index + m[0].length).trim() };
+  const marker = /^[ \t]*-*[ \t]*(?:english(?: below| version)?|in english)[ \t]*-*[ \t]*$/gim;
+  const body = text.replace(/^\s*-*\s*english below\s*-*\s*\n/i, ''); // aankondiging bovenaan weghalen
+  const hits = [...body.matchAll(marker)].filter((m) => m.index > 40);
+  const m = hits[hits.length - 1];
+  if (!m) return { nl: body.trim(), en: '' };
+  return { nl: body.slice(0, m.index).trim(), en: body.slice(m.index + m[0].length).trim() };
 }
 
 export function hasOwnEnglish(l) {
