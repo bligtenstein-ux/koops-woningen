@@ -4,7 +4,7 @@
 name: Koopaanbod bijwerken
 on:
   schedule:
-    - cron: '47 * * * *'
+    - cron: '53 5 * * *'   # dagelijks rond 06:53 (winter) / 07:53 (zomer)
   workflow_dispatch:
     inputs:
       force:

@@ -1,8 +1,8 @@
-# Bouwt woningen.verhuurmetkoops.nl elk uur opnieuw uit het aanbod op koopsmakelaardij.nl.
+# Bouwt woningen.verhuurmetkoops.nl elke ochtend opnieuw uit het aanbod op koopsmakelaardij.nl.
 name: Huuraanbod bijwerken
 on:
   schedule:
-    - cron: '17 * * * *'
+    - cron: '23 5 * * *'   # dagelijks rond 06:23 (winter) / 07:23 (zomer)
   workflow_dispatch:
     inputs:
       force:

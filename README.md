@@ -5,7 +5,7 @@ Zet het aanbod van Koops Makelaardij Haarlem automatisch op eigen pagina's:
 - **woningen.verhuurmetkoops.nl**: huuraanbod (NL + EN), nieuwste bovenaan
 - **woningen.verkoopmetkoops.nl**: koopaanbod
 
-Elk uur haalt GitHub Actions het aanbod van de vestiging Haarlem op van koopsmakelaardij.nl (dat zelf via Kolibri/SiteLink wordt gevuld; SiteLink wordt dus niet extra belast) en bouwt een statische site.
+Elke ochtend haalt GitHub Actions het aanbod van de vestiging Haarlem op van koopsmakelaardij.nl (dat zelf via Kolibri/SiteLink wordt gevuld; SiteLink wordt dus niet extra belast) en bouwt een statische site.
 
 ## Wat er gemaakt wordt
 
