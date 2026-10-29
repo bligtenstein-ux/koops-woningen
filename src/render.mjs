@@ -65,6 +65,13 @@ export function stripHeaderLine(text, l) {
   return text.replace(/^-+\s*english below\s*-+\s*/i, '').trim();
 }
 
+/** Sommige advertenties hebben de Engelse tekst onder "- English -" in de Nederlandse omschrijving staan. */
+export function splitBilingual(text) {
+  const m = text.match(/^\s*-*\s*(?:english(?: below| version)?|in english)\s*-*\s*$/im);
+  if (!m) return { nl: text, en: '' };
+  return { nl: text.slice(0, m.index).trim(), en: text.slice(m.index + m[0].length).trim() };
+}
+
 export function hasOwnEnglish(l) {
   const nl = toText(l.descriptionNl), en = toText(l.descriptionEn);
   if (!en || en.length < 120) return false;
@@ -456,9 +463,10 @@ export function detailPage(ctx, l, { lang = 'nl', related = [] } = {}) {
   const rent = l.kind === 'rent';
   const imgs = ctx.imgs.get(l.id) || [];
   const path = en ? paths.detailEn(l) : paths.detail(l);
-  const enText = en ? (hasOwnEnglish(l) ? toText(l.descriptionEn) : ctx.translations?.[l.id] || '') : '';
+  const bi = splitBilingual(toText(l.descriptionNl));
+  const enText = en ? (hasOwnEnglish(l) ? toText(l.descriptionEn) : bi.en || ctx.translations?.[l.id] || '') : '';
   const nlFallback = en && !enText;
-  const raw = en ? enText || toText(l.descriptionNl) : toText(l.descriptionNl);
+  const raw = en ? enText || bi.nl : bi.nl;
   const text = stripHeaderLine(raw, l);
   const hasEn = ctx.enIds.has(l.id);
   const what = en ? (rent ? 'for rent' : 'for sale') : rent ? 'te huur' : 'te koop';
