@@ -14,7 +14,7 @@ img{max-width:100%;display:block}
 .logo img{height:44px;width:auto}
 .top-in{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:80px}
 .top nav{display:flex;align-items:center;gap:22px}
-.menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 20px;font-size:15px;font-weight:500}
+.menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 16px;font-size:14px;font-weight:500}
 .menu a,.menu button{font:inherit;color:var(--ink);background:none;border:0;padding:6px 0;cursor:pointer;text-decoration:none;border-bottom:2px solid transparent;display:inline-block}
 .menu a:hover,.menu a.on,.menu button:hover{border-bottom-color:var(--accent)}
 .menu .dd{position:relative}
