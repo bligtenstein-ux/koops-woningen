@@ -58,9 +58,10 @@ const num = (v) => {
 
 const date = (v) => (v && !String(v).startsWith('0000') ? String(v).slice(0, 10) : null);
 
-export function normalize(item, regionSlug) {
+export function normalize(item, regionSlug, { allOffices = false } = {}) {
   const parts = String(item.url_complete || '').split('/');
-  if (parts[1] !== regionSlug) return null; // alleen de vestiging Haarlem
+  const own = parts[1] === regionSlug; // vestiging Haarlem = eigen aanbod
+  if (!own && !allOffices) return null;
   const kind = item.rent_or_sale === 'sale' ? 'sale' : 'rent';
   const typeSeg = parts[0] || '';
   const typeNl = titleCase(typeSeg.replace(/-te-(huur|koop)$/, '').replace(/-/g, ' '));
@@ -71,6 +72,8 @@ export function normalize(item, regionSlug) {
   return {
     id: String(item.url_number),
     kind,
+    own,
+    officeKey: own ? regionSlug : String(item.region || parts[1] || '').toLowerCase(),
     status: Number(item.status),
     statusKey: st.key,
     active: st.active,

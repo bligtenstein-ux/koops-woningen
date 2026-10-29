@@ -41,6 +41,7 @@ h3{margin:0}
 .cb{padding:12px 2px 4px}
 .cb h3{font-size:18px;font-weight:800}
 .city{margin:0;color:var(--mute);font-size:14px}
+.office{color:var(--accent-d);font-weight:600}
 .price{font-weight:700;margin:6px 0 0}
 .meta{margin:2px 0 0;font-size:14px;color:var(--mute)}
 .when{display:block;font-size:13px;color:var(--mute);margin-top:4px}

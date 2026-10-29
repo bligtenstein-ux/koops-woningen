@@ -26,14 +26,32 @@
       "logo": "https://images.squarespace-cdn.com/content/v1/6321bfa16f0e8a5c85ca5e30/655f08ca-fa66-43f8-b5a1-78375e50655f/Koops+Makelaardij+Haarlem.jpg?format=500w",
       "rating": "4,7",
       "nav": [
-        ["Verhuren met Koops", "/nl/onze-diensten/verhuur"],
-        ["Kosten", "/nl/kosten-verhuurmakelaar"],
-        ["Verhuren aan expats", "/nl/verhuren-aan-expats"],
-        ["Contact", "/nl/overons/contact"]
+        [
+          "Verhuren met Koops",
+          "/nl/onze-diensten/verhuur"
+        ],
+        [
+          "Kosten",
+          "/nl/kosten-verhuurmakelaar"
+        ],
+        [
+          "Verhuren aan expats",
+          "/nl/verhuren-aan-expats"
+        ],
+        [
+          "Contact",
+          "/nl/overons/contact"
+        ]
       ],
       "navEn": [
-        ["Renting out with Koops", "/en/i-want-to-rent-out"],
-        ["Contact", "/en/about/contact"]
+        [
+          "Renting out with Koops",
+          "/en/i-want-to-rent-out"
+        ],
+        [
+          "Contact",
+          "/en/about/contact"
+        ]
       ],
       "ownerCta": {
         "title": "Ook je woning verhuren?",
@@ -56,14 +74,32 @@
       "logo": "https://images.squarespace-cdn.com/content/v1/64ad371e560d704325acbb6a/b421681e-fc5a-4069-a38e-5c06d9fbb844/koops+logo+black.png?format=500w",
       "rating": "4,6",
       "nav": [
-        ["Verkopen", "/nl/diensten/verkoop"],
-        ["Aankoop", "/nl/diensten/aankoop"],
-        ["Waardebepaling", "/nl/gratis-waardebepaling"],
-        ["Contact", "/nl/contact"]
+        [
+          "Verkopen",
+          "/nl/diensten/verkoop"
+        ],
+        [
+          "Aankoop",
+          "/nl/diensten/aankoop"
+        ],
+        [
+          "Waardebepaling",
+          "/nl/gratis-waardebepaling"
+        ],
+        [
+          "Contact",
+          "/nl/contact"
+        ]
       ],
       "navEn": [
-        ["Services", "/en/services"],
-        ["Contact", "/en/contact"]
+        [
+          "Services",
+          "/en/services"
+        ],
+        [
+          "Contact",
+          "/en/contact"
+        ]
       ],
       "ownerCta": {
         "title": "Ook je woning verkopen?",
@@ -76,7 +112,28 @@
         "text": "Sell for a fixed fee from € 3,950 including VAT, with one team for both your sale and your purchase.",
         "button": "Contact us",
         "href": "/en/contact"
-      }
+      },
+      "includeOtherOffices": true
+    }
+  },
+  "otherOffices": {
+    "amsterdam": {
+      "name": "Koops Makelaardij Amsterdam",
+      "short": "Koops Amsterdam",
+      "phone": "020 820 8772",
+      "phoneIntl": "+31208208772"
+    },
+    "amstelveen": {
+      "name": "Koops Makelaardij Amstelveen",
+      "short": "Koops Amstelveen",
+      "phone": "020 820 3676",
+      "phoneIntl": "+31208203676"
+    },
+    "leiden": {
+      "name": "Koops Makelaardij Leiden",
+      "short": "Koops Leiden",
+      "phone": "071 760 1632",
+      "phoneIntl": "+31717601632"
     }
   }
 }

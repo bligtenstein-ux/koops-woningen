@@ -96,6 +96,9 @@ const availability = (l, lang, today) => {
   return dateLong(l.availableFrom, lang);
 };
 
+const isOwn = (l) => l.own !== false;
+const otherOffice = (ctx, l) => (isOwn(l) ? null : ctx.otherOffices?.[l.officeKey] || { name: 'Koops Makelaardij', short: 'Koops Makelaardij', phone: ctx.office.phone, phoneIntl: ctx.office.phoneIntl });
+
 // ---------- paden ----------
 export const paths = {
   detail: (l) => `/woning/${l.citySlug}/${l.slug}/`,
@@ -157,7 +160,7 @@ function card(l, ctx, lang = 'nl') {
     <div class="ph">${img ? `<img src="${img.small}" alt="${esc(`${l.typeNl} ${l.street}, ${l.city}`)}" width="640" height="427" loading="lazy" decoding="async">` : '<div class="noimg"></div>'}<span class="badge b-${l.withdrawn ? 'afgerond' : l.statusKey}">${esc(statusLabel(l, lang))}</span></div>
     <div class="cb">
       <h3>${esc(l.street)}</h3>
-      <p class="city">${esc(l.city)}</p>
+      <p class="city">${esc(l.city)}${!isOwn(l) ? ` <span class="office">· ${esc(otherOffice(ctx, l).short)}</span>` : ''}</p>
       <p class="price">${esc(priceLabel(l, lang))}</p>
       ${meta ? `<p class="meta">${esc(meta)}</p>` : ''}
       ${when}
@@ -253,8 +256,9 @@ export function indexPage(ctx, { active, closed, places }) {
   const h1 = rent ? 'Huurwoningen van Koops Makelaardij in Haarlem en omgeving' : 'Woningen te koop bij Koops Makelaardij in Haarlem en omgeving';
   const intro = rent
     ? `Dit is het actuele huuraanbod van Koops Makelaardij Haarlem: ${active.length} ${active.length === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan. Veel woningen zijn gemeubileerd en geschikt voor expats.`
-    : `Dit is het actuele koopaanbod van Koops Makelaardij Haarlem: ${active.length} ${active.length === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan.`;
+    : (() => { const o = active.filter(isOwn).length, x = active.length - o; return `Dit is het actuele koopaanbod van Koops Makelaardij Haarlem: ${o} ${o === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan${x ? `, gevolgd door ${x} ${x === 1 ? 'woning' : 'woningen'} van onze vestigingen in Amsterdam, Amstelveen en Leiden` : ''}.`; })();
   const recent = closed.slice(0, 6);
+  const own = active.filter(isOwn), others = active.filter((l) => !isOwn(l));
   const ld = [
     breadcrumbLd(ctx, [[rent ? 'Huuraanbod' : 'Koopaanbod', '/']]),
     { '@type': 'ItemList', name: h1, numberOfItems: active.length, itemListElement: active.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: ctx.base + paths.detail(l), name: `${l.street}, ${l.city}` })) },
@@ -266,9 +270,14 @@ export function indexPage(ctx, { active, closed, places }) {
   ${places.length ? `<p class="chips">${places.map((p) => `<a href="${paths.place(p.slug)}">${esc(p.city)}</a>`).join('')}</p>` : ''}
 </section>
 <section>
-  <h2 class="sr">${rent ? 'Beschikbare huurwoningen' : 'Beschikbare koopwoningen'}</h2>
-  ${active.length ? grid(active, ctx) : `<p class="empty">${rent ? 'Op dit moment is al ons huuraanbod verhuurd.' : 'Op dit moment hebben we geen woningen te koop.'} Bekijk ook <a href="${ctx.sourceBase}zoeken">het aanbod van alle Koops-vestigingen</a>.</p>`}
+  <h2 class="${others.length ? '' : 'sr'}">${rent ? 'Beschikbare huurwoningen' : 'Te koop via Koops Makelaardij Haarlem'}</h2>
+  ${own.length ? grid(own, ctx) : `<p class="empty">${rent ? 'Op dit moment is al ons huuraanbod verhuurd.' : 'Op dit moment hebben we in Haarlem en omgeving geen woningen te koop.'} Bekijk ook <a href="${ctx.sourceBase}zoeken">het aanbod van alle Koops-vestigingen</a>.</p>`}
 </section>
+${others.length ? `<section class="sec">
+  <div class="sec-head"><h2>Te koop bij onze andere vestigingen</h2></div>
+  <p class="small">Aanbod van Koops Makelaardij in Amsterdam, Amstelveen en Leiden. Voor deze woningen helpt de betreffende vestiging je verder.</p>
+  ${grid(others, ctx)}
+</section>` : ''}
 ${recent.length ? `<section class="sec">
   <div class="sec-head"><h2>${rent ? 'Recent verhuurd' : 'Recent verkocht'}</h2><a href="${paths.archive(ctx.site.kind)}">${rent ? 'Alle verhuurde woningen' : 'Alle verkochte woningen'} →</a></div>
   ${grid(recent, ctx)}
@@ -331,7 +340,7 @@ function listingLd(ctx, l, url, imgs, text) {
     priceCurrency: 'EUR',
     businessFunction: l.kind === 'rent' ? 'http://purl.org/goodrelations/v1#LeaseOut' : 'http://purl.org/goodrelations/v1#Sell',
     availability: l.active ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
-    offeredBy: { '@id': ctx.site.orgId },
+    offeredBy: isOwn(l) ? { '@id': ctx.site.orgId } : { '@type': 'RealEstateAgent', name: otherOffice(ctx, l).name, telephone: otherOffice(ctx, l).phoneIntl },
   };
   if (l.kind === 'rent' && l.price) offer.priceSpecification = { '@type': 'UnitPriceSpecification', price: l.price, priceCurrency: 'EUR', unitCode: 'MON', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' } };
   return {
@@ -369,6 +378,7 @@ export function detailPage(ctx, l, { lang = 'nl', related = [] } = {}) {
     ? [['Homes for rent', '/en/'], [`${l.street}, ${l.city}`, path]]
     : [[rent ? 'Huuraanbod' : 'Koopaanbod', '/'], ...(ctx.placeSlugs.has(l.citySlug) ? [[l.city, paths.place(l.citySlug)]] : []), [l.street, path]];
   const source = `${ctx.sourceBase}${l.sourceUrl}?utm_source=${encodeURIComponent(ctx.site.domain)}&utm_medium=referral&utm_campaign=woningaanbod`;
+  const oo = otherOffice(ctx, l);
   const wa = `https://wa.me/${ctx.office.whatsapp}?text=${encodeURIComponent(`Hallo Koops, ik heb interesse in ${l.street}, ${l.city} (${ctx.base}${path})`)}`;
   const closedBanner = !l.active
     ? `<div class="notice"><strong>${esc(statusLabel(l, lang))}${l.closedOn && !l.withdrawn ? ` ${en ? 'in' : 'in'} ${monthLong(l.closedOn, lang)}` : ''}.</strong> ${en ? 'This home is no longer available.' : 'Deze woning is niet meer beschikbaar.'} <a href="${en ? '/en/' : '/'}">${en ? 'View current listings' : 'Bekijk het actuele aanbod'}</a></div>`
@@ -383,8 +393,9 @@ export function detailPage(ctx, l, { lang = 'nl', related = [] } = {}) {
     ? `<aside class="contact">
   <p class="price big">${esc(priceLabel(l, lang))}</p>
   <a class="btn" href="${esc(source)}" rel="noopener">${en ? 'Respond to this home' : 'Reageer op deze woning'}</a>
-  <a class="btn line" href="tel:${ctx.office.phoneIntl}">${en ? 'Call' : 'Bel'} ${esc(ctx.office.phone)}</a>
-  <a class="btn line" href="${esc(wa)}" rel="noopener">WhatsApp</a>
+  <a class="btn line" href="tel:${oo ? oo.phoneIntl : ctx.office.phoneIntl}">${en ? 'Call' : 'Bel'} ${esc(oo ? oo.phone : ctx.office.phone)}</a>
+  ${oo ? '' : `<a class="btn line" href="${esc(wa)}" rel="noopener">WhatsApp</a>`}
+  ${oo ? `<p class="small"><strong>${en ? 'Offered by' : 'Aangeboden door'} ${esc(oo.name)}.</strong></p>` : ''}
   <p class="small">${en ? 'You respond via the Koops Makelaardij website, where you can also request a viewing.' : 'Je reageert via de website van Koops Makelaardij, waar je ook een bezichtiging aanvraagt.'}</p>
 </aside>`
     : `<aside class="contact"><p class="price big">${esc(statusLabel(l, lang))}</p><a class="btn" href="${en ? '/en/' : '/'}">${en ? 'View current listings' : 'Bekijk het actuele aanbod'}</a></aside>`;

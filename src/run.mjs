@@ -23,10 +23,13 @@ if (!site) throw new Error(`Onbekende SITE: ${SITE}`);
 
 console.log(`▶ ${site.domain}: bron ophalen…`);
 const raw = await loadSource({ url: cfg.source.url, fixture: process.env.FIXTURE });
-const office = raw.map((i) => normalize(i, cfg.source.region)).filter(Boolean);
-if (!office.length) throw new Error('Bron bevat 0 woningen van de vestiging Haarlem: synchronisatie afgebroken.');
-const incoming = office.filter((l) => l.kind === site.kind);
-console.log(`  bron: ${raw.length} objecten, Haarlem: ${office.length}, ${site.kind === 'rent' ? 'huur' : 'koop'}: ${incoming.length}`);
+const normalized = raw.map((i) => normalize(i, cfg.source.region, { allOffices: true })).filter(Boolean);
+const ownAll = normalized.filter((l) => l.own);
+if (!ownAll.length) throw new Error('Bron bevat 0 woningen van de vestiging Haarlem: synchronisatie afgebroken.');
+// Eigen aanbod (actief + afgerond). Bij includeOtherOffices ook het actieve aanbod van de andere vestigingen;
+// hun verkochte woningen komen niet in ons archief.
+const incoming = normalized.filter((l) => l.kind === site.kind && (l.own || (site.includeOtherOffices && l.active)));
+console.log(`  bron: ${raw.length} objecten, Haarlem: ${ownAll.length}, ${site.kind === 'rent' ? 'huur' : 'koop'}: ${incoming.length} (waarvan andere vestigingen: ${incoming.filter((l) => !l.own).length})`);
 
 const archiveFile = path.join(DATA_DIR, `${SITE}.json`);
 const archive = await readArchive(archiveFile);
@@ -37,9 +40,11 @@ if (prevActive >= 4 && nowActive === 0 && !process.env.FORCE) {
 archive.updated = today;
 
 const all = Object.values(archive.listings);
+const isOwn = (l) => l.own !== false;
 const byOnline = (a, b) => (b.online || '').localeCompare(a.online || '') || Number(b.id) - Number(a.id);
-const active = all.filter((l) => l.active).sort(byOnline);
-const closed = all.filter((l) => !l.active && !l.withdrawn).sort((a, b) => (b.closedOn || '').localeCompare(a.closedOn || '') || byOnline(a, b));
+// Eigen aanbod altijd bovenaan, daarna de andere vestigingen; binnen elke groep de nieuwste eerst.
+const active = all.filter((l) => l.active).sort((a, b) => isOwn(b) - isOwn(a) || byOnline(a, b));
+const closed = all.filter((l) => !l.active && !l.withdrawn && isOwn(l)).sort((a, b) => (b.closedOn || '').localeCompare(a.closedOn || '') || byOnline(a, b));
 const withdrawn = all.filter((l) => l.withdrawn);
 console.log(`  actief: ${active.length}, archief: ${closed.length}, ingetrokken: ${withdrawn.length}`);
 
@@ -56,14 +61,14 @@ const enIds = new Set(site.kind === 'rent' ? active.filter(R.hasOwnEnglish).map(
 
 // Plaatspagina's: alleen waar genoeg te tonen is.
 const placeMap = new Map();
-for (const l of [...active, ...closed]) {
+for (const l of [...active.filter(isOwn), ...closed]) {
   if (!placeMap.has(l.citySlug)) placeMap.set(l.citySlug, { city: l.city, slug: l.citySlug, active: [], closed: [] });
   placeMap.get(l.citySlug)[l.active ? 'active' : 'closed'].push(l);
 }
 const places = [...placeMap.values()].filter((p) => p.active.length + p.closed.length >= 3).sort((a, b) => b.active.length + b.closed.length - (a.active.length + a.closed.length));
 
 const ctx = {
-  site, office: cfg.office, today, imgs, enIds,
+  site, office: cfg.office, otherOffices: cfg.otherOffices || {}, today, imgs, enIds,
   base: `https://${site.domain}`,
   sourceBase: cfg.source.detailBase,
   placeSlugs: new Set(places.map((p) => p.slug)),
@@ -76,7 +81,7 @@ async function put(rel, content) {
   await writeFile(file, content);
 }
 
-const related = (l) => active.filter((x) => x.id !== l.id).sort((a, b) => (b.citySlug === l.citySlug) - (a.citySlug === l.citySlug)).slice(0, 3);
+const related = (l) => active.filter((x) => x.id !== l.id).sort((a, b) => isOwn(b) - isOwn(a) || (b.citySlug === l.citySlug) - (a.citySlug === l.citySlug)).slice(0, 3);
 
 await put('/', R.indexPage(ctx, { active, closed, places }));
 if (site.kind === 'rent') await put('/en/', R.indexPageEn(ctx, { active, closed }));
@@ -108,7 +113,7 @@ const llms = `# ${rent ? 'Huuraanbod' : 'Koopaanbod'} Koops Makelaardij Haarlem
 > Actueel ${rent ? 'huuraanbod' : 'koopaanbod'} van Koops Makelaardij Haarlem (Gedempte Oude Gracht 152 A, Haarlem, ${cfg.office.phone}). Dagelijks automatisch bijgewerkt. Laatste update: ${today}. Hoofdsite: ${site.mainSite}/
 
 ## Nu ${rent ? 'te huur' : 'te koop'} (${active.length})
-${active.map((l) => `- [${l.street}, ${l.city}](${ctx.base}${R.paths.detail(l)}): ${R.priceLabel(l)}${l.surface ? `, ca. ${R.fmtNum(l.surface)} m²` : ''}${l.rooms ? `, ${l.rooms} kamers` : ''}${l.furnishing ? `, ${l.furnishing.toLowerCase()}` : ''}. Status: ${R.statusLabel(l)}.`).join('\n') || '- Op dit moment geen aanbod.'}
+${active.map((l) => `- [${l.street}, ${l.city}](${ctx.base}${R.paths.detail(l)}): ${R.priceLabel(l)}${l.surface ? `, ca. ${R.fmtNum(l.surface)} m²` : ''}${l.rooms ? `, ${l.rooms} kamers` : ''}${l.furnishing ? `, ${l.furnishing.toLowerCase()}` : ''}. Status: ${R.statusLabel(l)}.${isOwn(l) ? '' : ` Aangeboden door ${ctx.otherOffices[l.officeKey]?.name || 'een andere Koops-vestiging'}.`}`).join('\n') || '- Op dit moment geen aanbod.'}
 
 ## Per plaats
 ${places.map((p) => {
@@ -127,6 +132,7 @@ const widgetItems = active.map((l) => ({
   url: R.paths.detail(l), street: l.street, city: l.city, status: l.statusKey, label: R.statusLabel(l), price: R.priceLabel(l),
   meta: [l.surface && `${R.fmtNum(l.surface)} m²`, l.rooms && `${l.rooms} kamers`].filter(Boolean).join(' · '),
   img: imgs.get(l.id)?.[0]?.small || null,
+  own: isOwn(l),
 }));
 await put('/latest.json', JSON.stringify({ updated: today, items: widgetItems }, null, 1));
 await put('/widget.js', widgetJs(ctx.base, widgetItems, site.kind));
