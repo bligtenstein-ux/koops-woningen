@@ -67,7 +67,8 @@ h3{margin:0}
 .gallery{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:28px}
 .g-main img{width:100%;height:100%;max-height:560px;object-fit:cover}
 .g-rest{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:560px;overflow-y:auto}
-.g-rest img{aspect-ratio:3/2;object-fit:cover;width:100%}
+.g-rest a{display:block}
+.g-rest img{aspect-ratio:3/2;object-fit:cover;width:100%;height:auto}
 .d-cols{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:40px;align-items:start}
 .prose{max-width:720px}
 .prose p{margin:0 0 14px}
