@@ -72,7 +72,238 @@
       "premiumClosed": {
         "minPrice": 2750,
         "months": 18
-      }
+      },
+      "menu": [
+        [
+          "Aanbod",
+          "~/aanbod/"
+        ],
+        [
+          "Home",
+          "/"
+        ],
+        {
+          "label": "Onze diensten",
+          "items": [
+            [
+              "Verhuur",
+              "/nl/onze-diensten/verhuur"
+            ],
+            [
+              "Verkoop",
+              "/nl/onze-diensten/verkoop"
+            ],
+            [
+              "Aanhuur",
+              "/aanhuur"
+            ],
+            [
+              "Aankoop",
+              "/nl/onze-diensten/aankoop"
+            ],
+            [
+              "Schoonmaak",
+              "/nl/onze-diensten/schoonmaak"
+            ],
+            [
+              "Hypotheek – Financiering",
+              "/nl/onze-diensten/hypotheek-financiering"
+            ],
+            [
+              "Onderhoud & Renovatie",
+              "/nl/onze-diensten/onderhoud-renovatie"
+            ],
+            [
+              "Portefeuille scan middenhuur",
+              "/nl/onze-diensten/portefeuille-scan-middenhuur"
+            ],
+            [
+              "Expats",
+              "/nl/onze-diensten/verkoop-1"
+            ]
+          ]
+        },
+        [
+          "Onze producten",
+          "/nl/onze-diensten/producten"
+        ],
+        {
+          "label": "Ik wil verhuren",
+          "items": [
+            [
+              "Waardecheck",
+              "/waardebepaling-check"
+            ],
+            [
+              "Energielabel aanvragen",
+              "/nl/energielabel-aanvragen"
+            ],
+            [
+              "Quickscan aanvragen",
+              "/nl/quickscan-aanvragen"
+            ],
+            [
+              "Puntentelling aanvragen",
+              "/nl/puntentelling-aanvragen"
+            ],
+            [
+              "Kosten verhuurmakelaar",
+              "/nl/kosten-verhuurmakelaar"
+            ],
+            [
+              "Verhuren aan expats",
+              "/nl/verhuren-aan-expats"
+            ],
+            [
+              "Tijdelijk verhuren",
+              "/nl/tijdelijk-verhuren"
+            ]
+          ]
+        },
+        {
+          "label": "Ik wil huren",
+          "items": [
+            [
+              "Op zoek naar een huurhuis?",
+              "/nl/op-zoek-naar-een-huurhuis"
+            ],
+            [
+              "Te huur regio Haarlem",
+              "~/"
+            ],
+            [
+              "Te koop regio Haarlem",
+              "https://woningen.verkoopmetkoops.nl/"
+            ],
+            [
+              "Huisvesting voor medewerkers",
+              "/nl/huisvesting-medewerkers"
+            ]
+          ]
+        },
+        {
+          "label": "Handige info",
+          "items": [
+            [
+              "Blog",
+              "/nl/blog"
+            ],
+            [
+              "Brochure",
+              "/brochure"
+            ],
+            [
+              "Woning fotoklaar maken",
+              "/checklist/tips-om-je-woning-fotoklaar-te-maken"
+            ],
+            [
+              "Ultieme verhuurgids",
+              "/nl/de-ultieme-gids-voor-succesvol-verhuren"
+            ],
+            [
+              "Veelgestelde vragen over verhuren",
+              "/nl/veelgestelde-vragen-over-verhuren"
+            ]
+          ]
+        },
+        {
+          "label": "Over ons",
+          "items": [
+            [
+              "Over ons",
+              "/nl/overons/over-ons"
+            ],
+            [
+              "Ons team",
+              "/nl/overons/ons-team"
+            ],
+            [
+              "Contact",
+              "/nl/overons/contact"
+            ]
+          ]
+        }
+      ],
+      "menuEn": [
+        [
+          "Listings",
+          "~/en/"
+        ],
+        [
+          "Home",
+          "/en/home"
+        ],
+        [
+          "Our services",
+          "/en/our-services"
+        ],
+        [
+          "Rental search service",
+          "/en/rental-search-service"
+        ],
+        [
+          "I want to rent out",
+          "/en/i-want-to-rent-out"
+        ],
+        {
+          "label": "I want to rent",
+          "items": [
+            [
+              "Looking for a rental house?",
+              "/en/looking-for-a-rental-house"
+            ],
+            [
+              "For rent in Haarlem region",
+              "~/en/"
+            ],
+            [
+              "Housing for employees",
+              "/en/housing-for-employees"
+            ]
+          ]
+        },
+        {
+          "label": "Resources",
+          "items": [
+            [
+              "Blog",
+              "/en/blog"
+            ],
+            [
+              "Ultimate Rental Guide",
+              "/en/the-ultimate-rental-guide"
+            ]
+          ]
+        },
+        {
+          "label": "About us",
+          "items": [
+            [
+              "About us",
+              "/en/about/about-us"
+            ],
+            [
+              "Our team",
+              "/en/about/our-team"
+            ],
+            [
+              "Contact",
+              "/en/about/contact"
+            ]
+          ]
+        }
+      ],
+      "cta": {
+        "nl": [
+          "Waardecheck",
+          "/waardebepaling-check"
+        ],
+        "en": [
+          "Value check",
+          "/waardebepaling-check"
+        ]
+      },
+      "homeEn": "/en/home"
     },
     "koop": {
       "kind": "sale",
@@ -128,7 +359,118 @@
       "premiumClosed": {
         "minPrice": 750000,
         "months": 18
-      }
+      },
+      "menu": [
+        [
+          "Verkoop",
+          "/nl/diensten/verkoop"
+        ],
+        [
+          "Aankoop",
+          "/nl/diensten/aankoop"
+        ],
+        [
+          "Verhuur",
+          "/nl/diensten/verhuur"
+        ],
+        [
+          "Werkwijze",
+          "/nl/werkwijze"
+        ],
+        [
+          "Bekijk het aanbod",
+          "~/"
+        ],
+        [
+          "Transacties",
+          "/nl/verkochte-woningen"
+        ],
+        {
+          "label": "Kennisbank",
+          "items": [
+            [
+              "Checklists",
+              "/nl/checklists-voor-succesvolle-verkoop-huis"
+            ],
+            [
+              "Blog",
+              "/blog"
+            ]
+          ]
+        },
+        {
+          "label": "Over Koops",
+          "items": [
+            [
+              "Ons team",
+              "/nl/over-ons/ons-team"
+            ],
+            [
+              "Over Koops",
+              "/nl/over-ons/over-koops"
+            ]
+          ]
+        },
+        [
+          "Contact",
+          "/nl/contact"
+        ]
+      ],
+      "menuEn": [
+        [
+          "Homes for sale",
+          "~/en/"
+        ],
+        [
+          "Services",
+          "/en/services"
+        ],
+        [
+          "Our Approach",
+          "/en/our-approach"
+        ],
+        [
+          "Sold properties",
+          "/en/sold-properties"
+        ],
+        {
+          "label": "Resources",
+          "items": [
+            [
+              "Checklists",
+              "/en/checklists-for-successfully-selling-property"
+            ]
+          ]
+        },
+        {
+          "label": "About Koops",
+          "items": [
+            [
+              "About Koops",
+              "/en/about-us/about-koops"
+            ],
+            [
+              "Our team",
+              "/en/about-us/our-team"
+            ]
+          ]
+        },
+        [
+          "Contact",
+          "/en/contact"
+        ]
+      ],
+      "cta": {
+        "nl": [
+          "Gratis waardebepaling",
+          "/nl/gratis-waardebepaling"
+        ],
+        "en": [
+          "Free valuation",
+          "/nl/gratis-waardebepaling"
+        ]
+      },
+      "homeEn": "/en/home/"
     }
   },
   "otherOffices": {

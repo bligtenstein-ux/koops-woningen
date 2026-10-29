@@ -121,18 +121,24 @@ export const paths = {
 // ---------- bouwstenen ----------
 function header(ctx, lang, altHref, path) {
   const s = ctx.site;
-  const nav = lang === 'en' ? s.navEn : s.nav;
-  const aanbod = lang === 'en' ? [s.kind === 'rent' ? 'Homes for rent' : 'Homes for sale', '/en/'] : [s.kind === 'rent' ? 'Huuraanbod' : 'Koopaanbod', '/'];
-  const allLink = lang === 'en' ? '' : `<a${path === paths.all() ? ' class="on"' : ''} href="${paths.all()}">Alle woningen</a>`;
-  const langLink = lang === 'en' ? `<a class="lang" href="${esc(altHref || '/')}" hreflang="nl" lang="nl">NL</a>` : `<a class="lang" href="${esc(altHref || '/en/')}" hreflang="en" lang="en">EN</a>`;
+  const en = lang === 'en';
+  const menu = (en ? s.menuEn : s.menu) || [];
+  // "~/" = pagina op deze woningsite, "/" = pagina op de hoofdsite, http = volledige link.
+  const url = (h) => (h.startsWith('~/') ? h.slice(1) : h.startsWith('/') ? s.mainSite + h : h);
+  const isOn = (h) => h.startsWith('~/') && h.slice(1) === path;
+  const link = ([t, h]) => `<a href="${esc(url(h))}"${isOn(h) ? ' class="on" aria-current="page"' : ''}>${esc(t)}</a>`;
+  const items = menu.map((it) => (Array.isArray(it)
+    ? `<li>${link(it)}</li>`
+    : `<li class="dd"><button type="button" aria-expanded="false">${esc(it.label)}</button><ul>${it.items.map((x) => `<li>${link(x)}</li>`).join('')}</ul></li>`)).join('');
+  const langLink = en ? `<a class="lang" href="${esc(altHref || '/')}" hreflang="nl" lang="nl">NL</a>` : `<a class="lang" href="${esc(altHref || '/en/')}" hreflang="en" lang="en">EN</a>`;
+  const cta = s.cta ? (en ? s.cta.en : s.cta.nl) : null;
   return `<header class="top">
   <div class="wrap top-in">
-    <a class="logo" href="${s.mainSite}/"><img src="${s.logo}" alt="Koops Makelaardij Haarlem" width="190" height="48"></a>
-    <nav aria-label="${lang === 'en' ? 'Main' : 'Hoofdmenu'}">
-      <a${path === paths.all() ? '' : ' class="on"'} href="${aanbod[1]}">${aanbod[0]}</a>
-      ${allLink}
-      ${nav.map(([t, h]) => `<a href="${s.mainSite}${h}">${esc(t)}</a>`).join('\n      ')}
-      ${langLink}
+    <a class="logo" href="${s.mainSite}${en ? s.homeEn || '/' : '/'}"><img src="${s.logo}" alt="Koops Makelaardij Haarlem" width="190" height="48"></a>
+    <button class="burger" type="button" aria-label="${en ? 'Menu' : 'Menu'}" aria-expanded="false" aria-controls="hoofdmenu"><span></span><span></span><span></span></button>
+    <nav id="hoofdmenu" aria-label="${en ? 'Main' : 'Hoofdmenu'}">
+      <ul class="menu">${items}</ul>
+      <div class="top-act">${langLink}${cta ? `<a class="btn small-btn" href="${esc(url(cta[1]))}">${esc(cta[0])}</a>` : ''}</div>
     </nav>
   </div>
 </header>`;
