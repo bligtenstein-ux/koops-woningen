@@ -64,7 +64,8 @@
         "text": "We let homes in Haarlem and the surrounding area in about one week on average, often to screened expats. Our fee is one month's rent including VAT, only when your home is let.",
         "button": "Get in touch",
         "href": "/en/i-want-to-rent-out"
-      }
+      },
+      "includeOtherOffices": true
     },
     "koop": {
       "kind": "sale",

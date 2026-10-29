@@ -255,7 +255,7 @@ export function indexPage(ctx, { active, closed, places }) {
   const rent = ctx.site.kind === 'rent';
   const h1 = rent ? 'Huurwoningen van Koops Makelaardij in Haarlem en omgeving' : 'Woningen te koop bij Koops Makelaardij in Haarlem en omgeving';
   const intro = rent
-    ? `Dit is het actuele huuraanbod van Koops Makelaardij Haarlem: ${active.length} ${active.length === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan. Veel woningen zijn gemeubileerd en geschikt voor expats.`
+    ? (() => { const o = active.filter(isOwn).length, x = active.length - o; return `Dit is het actuele huuraanbod van Koops Makelaardij Haarlem: ${o} ${o === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan${x ? `, gevolgd door ${x} ${x === 1 ? 'woning' : 'woningen'} van onze vestigingen in Amsterdam, Amstelveen en Leiden` : ''}. Veel woningen zijn gemeubileerd en geschikt voor expats.`; })()
     : (() => { const o = active.filter(isOwn).length, x = active.length - o; return `Dit is het actuele koopaanbod van Koops Makelaardij Haarlem: ${o} ${o === 1 ? 'woning' : 'woningen'}, de nieuwste bovenaan${x ? `, gevolgd door ${x} ${x === 1 ? 'woning' : 'woningen'} van onze vestigingen in Amsterdam, Amstelveen en Leiden` : ''}.`; })();
   const recent = closed.slice(0, 6);
   const own = active.filter(isOwn), others = active.filter((l) => !isOwn(l));
@@ -270,11 +270,11 @@ export function indexPage(ctx, { active, closed, places }) {
   ${places.length ? `<p class="chips">${places.map((p) => `<a href="${paths.place(p.slug)}">${esc(p.city)}</a>`).join('')}</p>` : ''}
 </section>
 <section>
-  <h2 class="${others.length ? '' : 'sr'}">${rent ? 'Beschikbare huurwoningen' : 'Te koop via Koops Makelaardij Haarlem'}</h2>
+  <h2 class="${others.length ? '' : 'sr'}">${rent ? 'Te huur via Koops Makelaardij Haarlem' : 'Te koop via Koops Makelaardij Haarlem'}</h2>
   ${own.length ? grid(own, ctx) : `<p class="empty">${rent ? 'Op dit moment is al ons huuraanbod verhuurd.' : 'Op dit moment hebben we in Haarlem en omgeving geen woningen te koop.'} Bekijk ook <a href="${ctx.sourceBase}zoeken">het aanbod van alle Koops-vestigingen</a>.</p>`}
 </section>
 ${others.length ? `<section class="sec">
-  <div class="sec-head"><h2>Te koop bij onze andere vestigingen</h2></div>
+  <div class="sec-head"><h2>${rent ? 'Te huur' : 'Te koop'} bij onze andere vestigingen</h2></div>
   <p class="small">Aanbod van Koops Makelaardij in Amsterdam, Amstelveen en Leiden. Voor deze woningen helpt de betreffende vestiging je verder.</p>
   ${grid(others, ctx)}
 </section>` : ''}
@@ -303,8 +303,9 @@ export function indexPageEn(ctx, { active, closed }) {
   <p class="lead">${esc(intro)}</p>
 </section>
 <section>
-  ${active.length ? grid(active, ctx, 'en') : '<p class="empty">All our rental homes are currently let.</p>'}
+  ${active.filter(isOwn).length ? grid(active.filter(isOwn), ctx, 'en') : '<p class="empty">All our rental homes in the Haarlem area are currently let.</p>'}
 </section>
+${active.some((l) => !isOwn(l)) ? `<section class="sec"><div class="sec-head"><h2>For rent at our other offices</h2></div><p class="small">Listings from Koops Makelaardij in Amsterdam, Amstelveen and Leiden.</p>${grid(active.filter((l) => !isOwn(l)), ctx, 'en')}</section>` : ''}
 ${closed.length ? `<section class="sec"><div class="sec-head"><h2>Recently let</h2></div>${grid(closed.slice(0, 6), ctx, 'en')}</section>` : ''}
 ${ownerCta(ctx, 'en')}`;
   return layout(ctx, {
