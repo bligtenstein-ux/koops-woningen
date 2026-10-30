@@ -146,7 +146,8 @@ h3{margin:0}
 @media (max-width:520px){.f2,.f3{grid-template-columns:1fr}.f-inline{flex-direction:column;align-items:stretch}}
 @media (max-width:860px){
   .gallery{grid-template-columns:1fr}
-  .g-rest{grid-template-columns:repeat(3,1fr);max-height:none}
+  .g-rest{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;max-height:none;gap:8px;-webkit-overflow-scrolling:touch}
+  .g-rest a{flex:0 0 42%;scroll-snap-align:start}
   .d-cols{grid-template-columns:1fr}
   .contact{position:static;order:-1}
   .owner{grid-template-columns:1fr;padding:26px 20px}
@@ -163,7 +164,7 @@ h3{margin:0}
   .stats div{border-right:0;border-bottom:1px solid var(--line)}
   .stats div:nth-child(odd){border-right:1px solid var(--line)}
 }
-@media (max-width:520px){.top nav{font-size:13px;gap:2px 12px}.g-rest{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.top nav{font-size:13px;gap:2px 12px}}
 `;
 
 export const FAVICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#FF7701"/><path d="M9 7h4v8l7-8h5l-8 9 8 9h-5l-7-8v8H9z" fill="#fff"/></svg>`;
