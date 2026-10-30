@@ -17,8 +17,12 @@ var SHEETS = {
   Reacties: ['Ontvangen', 'Site', 'Taal', 'Woning', 'Plaats', 'Vestiging', 'Link', 'Naam', 'E-mail', 'Telefoon', 'Ingangsdatum', 'Bewoners', 'Bericht'],
   Bedrijven: ['Ontvangen', 'Taal', 'Bedrijf', 'Naam', 'E-mail', 'Telefoon', 'Aantal medewerkers', 'Per wanneer', 'Budget p/m', 'Plaats(en)', 'Bericht'],
   Inschrijvingen: ['Id', 'Aangemeld', 'Site', 'Taal', 'E-mail', 'Naam', 'Plaatsen', 'Max. prijs', 'Min. kamers', 'Oplevering', 'Status', 'Token', 'Bevestigd', 'Laatste mail', 'Aantal mails'],
-  Gezien: ['Site', 'Woning-id', 'Eerst gezien']
+  Gezien: ['Site', 'Woning-id', 'Eerst gezien'],
+  Leads: ['Datum', 'Kanaal', 'Type', 'Bron', 'Naam', 'E-mail', 'Telefoon', 'Onderwerp', 'Uitkomst', 'Opmerking']
 };
+var LEAD_KANALEN = ['Google Ads', 'Organisch / direct', 'Woningsite', 'Facebook / Growzy', 'Telefoon', 'WhatsApp', 'Doorverwijzing', 'Anders'];
+var LEAD_TYPES = ['Verhuurder', 'Verkoper', 'Koper', 'Verkoper + koper', 'Huurder', 'Bedrijf', 'Anders'];
+var LEAD_UITKOMST = ['Nieuw', 'Gebeld', 'Afspraak', 'Opdracht', 'Geen match', 'Geen reactie'];
 
 /* ---------- eenmalige installatie ---------- */
 function setup() {
@@ -38,7 +42,29 @@ function setup() {
   Logger.log('Sheet: ' + ss.getUrl());
 }
 
-function sheet_(name) { return SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SHEET_ID')).getSheetByName(name); }
+function sheet_(name) {
+  var ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SHEET_ID'));
+  var sh = ss.getSheetByName(name);
+  if (!sh && SHEETS[name]) { sh = ss.insertSheet(name); sh.appendRow(SHEETS[name]); sh.setFrozenRows(1); sh.getRange(1, 1, 1, SHEETS[name].length).setFontWeight('bold'); }
+  return sh;
+}
+
+/* Leadlog: één tabblad voor alle leads, ook handmatig aan te vullen (telefoon, Squarespace-formulieren, Facebook). */
+function setupLeads() {
+  var sh = sheet_('Leads');
+  var dv = function (list) { return SpreadsheetApp.newDataValidation().requireValueInList(list, true).setAllowInvalid(true).build(); };
+  sh.getRange('B2:B2000').setDataValidation(dv(LEAD_KANALEN));
+  sh.getRange('C2:C2000').setDataValidation(dv(LEAD_TYPES));
+  sh.getRange('I2:I2000').setDataValidation(dv(LEAD_UITKOMST));
+  sh.getRange('A2:A2000').setNumberFormat('dd-mm-yyyy hh:mm');
+  sh.setColumnWidths(1, 10, 140);
+  sh.getParent().setActiveSheet(sh);
+  sh.getParent().moveActiveSheet(1);
+}
+
+function lead_(kanaal, type, bron, naam, email, tel, onderwerp) {
+  try { sheet_('Leads').appendRow([new Date(), kanaal, type, bron, naam, email, tel, onderwerp, 'Nieuw', ''].map(safeCell_)); } catch (err) { console.error(err); }
+}
 
 /* ---------- formulieren ---------- */
 function doPost(e) {
@@ -69,6 +95,7 @@ function reactie_(d, email, lang) {
   var row = [new Date(), SITES[site].nl, lang, clean_(d.street, 120), clean_(d.city, 80), clean_(d.office, 80), clean_(d.url, 300),
     clean_(d.name, 120), email, clean_(d.phone, 40), clean_(d.from, 40), clean_(d.people, 40), clean_(d.message, 3000)];
   sheet_('Reacties').appendRow(row.map(safeCell_));
+  lead_('Woningsite', site === 'rent' ? 'Huurder' : 'Koper', SITES[site].base, row[7], email, row[9], row[3] + ', ' + row[4]);
   var subject = 'Reactie ' + (site === 'rent' ? 'huurwoning' : 'koopwoning') + ': ' + row[3] + ', ' + row[4] + ' – ' + row[7] + (row[5] && row[5] !== 'Haarlem' ? ' [' + row[5] + ']' : '');
   var html = table_([['Woning', row[3] + ', ' + row[4]], ['Vestiging', row[5]], ['Link', row[6]], ['Naam', row[7]], ['E-mail', email], ['Telefoon', row[9]],
     ['Gewenste ingangsdatum', row[10]], [site === 'rent' ? 'Aantal bewoners' : 'Wens', row[11]], ['Bericht', row[12]], ['Taal', lang === 'en' ? 'Engels' : 'Nederlands']]);
@@ -83,6 +110,7 @@ function reactie_(d, email, lang) {
 function bedrijf_(d, email, lang) {
   var row = [new Date(), lang, clean_(d.company, 120), clean_(d.name, 120), email, clean_(d.phone, 40), clean_(d.count, 40), clean_(d.from, 40), clean_(d.budget, 40), clean_(d.cities, 200), clean_(d.message, 3000)];
   sheet_('Bedrijven').appendRow(row.map(safeCell_));
+  lead_('Woningsite', 'Bedrijf', 'verhuurmetkoops.nl/huisvesting-medewerkers', row[3] + ' (' + row[2] + ')', email, row[5], row[6] + ' medewerkers, ' + row[9]);
   MailApp.sendEmail({ to: TO, replyTo: email, name: FROM_NAME, subject: 'Huisvesting medewerkers: ' + row[2] + ' – ' + row[3],
     htmlBody: '<p>Nieuwe aanvraag van een bedrijf via verhuurmetkoops.nl:</p>' + table_([['Bedrijf', row[2]], ['Naam', row[3]], ['E-mail', email], ['Telefoon', row[5]], ['Aantal medewerkers', row[6]], ['Per wanneer', row[7]], ['Budget p/m', row[8]], ['Plaats(en)', row[9]], ['Bericht', row[10]], ['Taal', lang === 'en' ? 'Engels' : 'Nederlands']]) });
   MailApp.sendEmail({ to: email, replyTo: TO, name: FROM_NAME,
