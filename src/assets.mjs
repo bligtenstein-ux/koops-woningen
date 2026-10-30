@@ -30,7 +30,7 @@ img{max-width:100%;display:block}
 .burger span{display:block;height:2px;background:var(--ink);margin:5px 0}
 @media (max-width:1100px){
   .burger{display:block}
-  .top nav{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);padding:8px 16px 20px;flex-direction:column;align-items:stretch;max-height:80vh;overflow-y:auto}
+  .top nav{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);padding:8px 16px 20px;flex-direction:column;align-items:stretch;max-height:calc(100vh - 80px);overflow-y:auto}
   .top.open nav{display:flex}
   .menu{flex-direction:column;gap:0;font-size:16px}
   .menu>li{border-bottom:1px solid var(--line)}
@@ -153,6 +153,16 @@ h3{margin:0}
   .foot-in{grid-template-columns:1fr}
   .stats div{border-right:0;border-bottom:1px solid var(--line)}
 }
+.mbar{display:none}
+@media (max-width:860px){
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom));gap:8px;box-shadow:0 -6px 20px rgba(0,0,0,.08)}
+  .mbar a{flex:1;text-align:center;padding:12px 6px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;text-decoration:none;border:2px solid var(--ink);color:var(--ink)}
+  .mbar a.go{background:var(--accent);border-color:var(--accent);color:#fff;flex:1.4}
+  body:has(.mbar){padding-bottom:72px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div{border-right:0;border-bottom:1px solid var(--line)}
+  .stats div:nth-child(odd){border-right:1px solid var(--line)}
+}
 @media (max-width:520px){.top nav{font-size:13px;gap:2px 12px}.g-rest{grid-template-columns:repeat(2,1fr)}}
 `;
 
@@ -166,7 +176,7 @@ export function widgetJs(base, items, kind) {
 (function(){
   var BASE=${JSON.stringify(base)}, ITEMS=${data};
   function e(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  var css='.kpw{font-family:inherit}.kpw-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}@media (max-width:767px){.kpw-g{grid-template-columns:1fr}}.kpw a{text-decoration:none;color:inherit;display:block}.kpw-ph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#f2f2f2}.kpw-ph img{width:100%;height:100%;object-fit:cover;display:block}.kpw-b{position:absolute;top:10px;left:10px;background:#000;color:#fff;font-size:12px;font-weight:700;padding:3px 9px;text-transform:uppercase;letter-spacing:.04em}.kpw-b.n{background:#FF7701}.kpw h3{margin:10px 0 0;font-size:18px;font-weight:800}.kpw p{margin:2px 0 0;font-size:15px}.kpw .kpw-m{color:#666;font-size:14px}.kpw-t{margin:0 0 24px}.kpw a.kpw-all{display:inline-block;margin-top:22px;background:#FF7701;color:#fff!important;padding:14px 22px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:14px}';
+  var css='.kpw{font-family:inherit}.kpw-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}@media (max-width:767px){.kpw-g{grid-template-columns:1fr}}.kpw a{text-decoration:none;color:inherit;display:block}.kpw-ph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#f2f2f2}.kpw-ph img{width:100%;height:100%;object-fit:cover;display:block}.kpw-b{position:absolute;top:10px;left:10px;background:#000;color:#fff;font-size:12px;font-weight:700;padding:3px 9px;text-transform:uppercase;letter-spacing:.04em}.kpw-b.n{background:#FF7701}.kpw h3{margin:10px 0 0!important;font-size:18px!important;font-weight:800!important;line-height:1.3!important;letter-spacing:0!important;font-family:inherit}.kpw p{margin:2px 0 0;font-size:15px}.kpw .kpw-m{color:#666;font-size:14px}.kpw-t{margin:0 0 24px}.kpw a.kpw-all{display:inline-block;margin-top:22px;background:#FF7701;color:#fff!important;padding:14px 22px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:14px}';
   function render(el){
     var n=parseInt(el.getAttribute('data-aantal')||'3',10), city=(el.getAttribute('data-plaats')||'').toLowerCase();
     var list=ITEMS.filter(function(i){return !city||i.city.toLowerCase()===city}).slice(0,n);
@@ -177,7 +187,9 @@ export function widgetJs(base, items, kind) {
     var title=el.getAttribute('data-titel');
     var h='<style>'+css+'</style><div class="kpw">'+(title?'<h2 class="kpw-t">'+e(title)+'</h2>':'')+'<div class="kpw-g">';
     list.forEach(function(i){h+='<article><a href="'+BASE+i.url+'"><div class="kpw-ph">'+(i.img?'<img src="'+(i.img.indexOf('http')===0?i.img:BASE+i.img)+'" alt="'+e(i.street+', '+i.city)+'" loading="lazy" width="640" height="427">':'')+'<span class="kpw-b'+(i.status==='nieuw'?' n':'')+'">'+e(i.label)+'</span></div><h3>'+e(i.street)+'</h3><p>'+e(i.city)+'</p><p><strong>'+e(i.price)+'</strong></p><p class="kpw-m">'+e(i.meta)+'</p></a></article>'});
-    h+='</div><a class="kpw-all" href="'+BASE+'/">${allLabel}</a></div>';
+    // Staat er in dezelfde sectie al een eigen Squarespace-knop naar het aanbod? Dan geen tweede knop.
+    var sec=el.closest('section'), dup=sec&&[].some.call(sec.querySelectorAll('a[href*="woningen."]'),function(a){return !el.contains(a)&&a.closest('.sqs-block-button, .sqs-block-button-container')});
+    h+='</div>'+(dup||el.getAttribute('data-knop')==='nee'?'':'<a class="kpw-all" href="'+BASE+'/">${allLabel}</a>')+'</div>';
     el.innerHTML=h;
   }
   function go(){var els=document.querySelectorAll('#koops-aanbod,[data-koops-aanbod]');for(var k=0;k<els.length;k++)render(els[k])}

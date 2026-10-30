@@ -506,6 +506,9 @@ export function detailPage(ctx, l, { lang = 'nl', related = [] } = {}) {
   ${ctx.formEndpoint ? '' : `<p class="small">${en ? 'You respond via the Koops Makelaardij website, where you can also request a viewing.' : 'Je reageert via de website van Koops Makelaardij, waar je ook een bezichtiging aanvraagt.'}</p>`}
 </aside>`
     : `<aside class="contact"><p class="price big">${esc(statusLabel(l, lang))}</p><a class="btn" href="${en ? '/en/' : '/'}">${en ? 'View current listings' : 'Bekijk het actuele aanbod'}</a></aside>`;
+  const mbar = l.active
+    ? `<nav class="mbar" aria-label="Contact"><a class="go" href="${ctx.formEndpoint ? '#reageer' : esc(source)}">${en ? 'Respond' : 'Reageer'}</a><a href="tel:${oo ? oo.phoneIntl : ctx.office.phoneIntl}">${en ? 'Call' : 'Bel'}</a>${oo ? '' : `<a href="${esc(wa)}" rel="noopener">WhatsApp</a>`}</nav>`
+    : '';
   const body = `
 ${breadcrumbs(crumbs)}
 ${closedBanner}
@@ -532,7 +535,8 @@ ${closedBanner}
 ${l.active && ctx.formEndpoint ? leadForm(ctx, l, lang) : ''}
 ${related.length ? `<section class="sec"><div class="sec-head"><h2>${en ? 'Other homes' : rent ? 'Meer huurwoningen' : 'Meer woningen te koop'}</h2></div>${grid(related, ctx, lang)}</section>` : ''}
 ${ctx.formEndpoint ? alertBox(ctx, lang, { city: l.city }) : ''}
-${ownerCta(ctx, lang, !l.active && rent && !en ? `Ook je woning in ${l.city} zo verhuren?` : null)}`;
+${ownerCta(ctx, lang, !l.active && rent && !en ? `Ook je woning in ${l.city} zo verhuren?` : null)}
+${mbar}`;
   const itemLd = listingLd(ctx, l, ctx.base + path, imgs, text);
   return layout(ctx, {
     lang,
