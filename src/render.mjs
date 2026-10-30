@@ -132,9 +132,13 @@ function header(ctx, lang, altHref, path) {
     : `<li class="dd"><button type="button" aria-expanded="false">${esc(it.label)}</button><ul>${it.items.map((x) => `<li>${link(x)}</li>`).join('')}</ul></li>`)).join('');
   const langLink = en ? `<a class="lang" href="${esc(altHref || '/')}" hreflang="nl" lang="nl">NL</a>` : `<a class="lang" href="${esc(altHref || '/en/')}" hreflang="en" lang="en">EN</a>`;
   const cta = s.cta ? (en ? s.cta.en : s.cta.nl) : null;
+  // Zwarte menubalk zoals op de hoofdsites: een wit logo (logoDark) als dat er is, anders het gewone logo,
+  // dat met logoInvert wit gemaakt wordt (zwart logo op transparante achtergrond).
+  const logoSrc = s.logoDark || s.logo;
+  const logoCls = !s.logoDark && s.logoInvert ? ' class="inv"' : '';
   return `<header class="top">
   <div class="wrap top-in">
-    <a class="logo" href="${s.mainSite}${en ? s.homeEn || '/' : '/'}"><img src="${s.logo}" alt="Koops Makelaardij Haarlem" width="190" height="48"></a>
+    <a class="logo" href="${s.mainSite}${en ? s.homeEn || '/' : '/'}"><img src="${logoSrc}"${logoCls} alt="Koops Makelaardij Haarlem" width="190" height="48"></a>
     <button class="burger" type="button" aria-label="${en ? 'Menu' : 'Menu'}" aria-expanded="false" aria-controls="hoofdmenu"><span></span><span></span><span></span></button>
     <nav id="hoofdmenu" aria-label="${en ? 'Main' : 'Hoofdmenu'}">
       <ul class="menu">${items}</ul>
@@ -491,7 +495,7 @@ export function detailPage(ctx, l, { lang = 'nl', related = [] } = {}) {
     ? `<div class="notice"><strong>${esc(statusLabel(l, lang))}${l.closedOn && !l.withdrawn ? ` ${en ? 'in' : 'in'} ${monthLong(l.closedOn, lang)}` : ''}.</strong> ${en ? 'This home is no longer available.' : 'Deze woning is niet meer beschikbaar.'} <a href="${en ? '/en/' : '/'}">${en ? 'View current listings' : 'Bekijk het actuele aanbod'}</a></div>`
     : '';
   const gallery = imgs.length
-    ? `<div class="gallery">
+    ? `<div class="gallery" data-lightbox>
   <a class="g-main" href="${imgs[0].large}"><img src="${imgs[0].large}" alt="${esc(`${l.typeNl} ${l.street}, ${l.city} – foto 1 van ${imgs.length}`)}" width="${imgs[0].width}" height="${imgs[0].height}" fetchpriority="high"></a>
   ${imgs.length > 1 ? `<div class="g-rest">${imgs.slice(1).map((im, i) => `<a href="${im.large}"><img src="${im.small}" alt="${esc(`${l.street}, ${l.city} – foto ${i + 2} van ${imgs.length}`)}" width="640" height="427" loading="lazy" decoding="async"></a>`).join('')}</div>` : ''}
 </div>`

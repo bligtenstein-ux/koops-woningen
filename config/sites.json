@@ -311,6 +311,7 @@
       "mainSite": "https://www.verkoopmetkoops.nl",
       "orgId": "https://www.verkoopmetkoops.nl/#organisatie",
       "logo": "https://images.squarespace-cdn.com/content/v1/64ad371e560d704325acbb6a/b421681e-fc5a-4069-a38e-5c06d9fbb844/koops+logo+black.png?format=500w",
+      "logoInvert": true,
       "rating": "4,6",
       "nav": [
         [
