@@ -115,7 +115,7 @@
    "created": "2026-08-10",
    "updated": "2026-09-07",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119538": {
@@ -393,7 +393,7 @@
    "created": "2026-09-08",
    "updated": "2026-11-04",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119559": {
@@ -701,7 +701,7 @@
    "created": "2026-08-31",
    "updated": "2026-11-16",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119574": {
@@ -754,7 +754,7 @@
    "created": "2026-09-22",
    "updated": "2026-11-16",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119577": {
@@ -814,7 +814,7 @@
    "created": "2026-09-22",
    "updated": "2026-11-18",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "own": true,
    "officeKey": "haarlem",
@@ -1010,7 +1010,7 @@
    "created": "2026-09-24",
    "updated": "2026-11-04",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119589": {
@@ -1078,7 +1078,7 @@
    "created": "2026-10-01",
    "updated": "2026-11-11",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "closedOn": "2026-11-11"
   },
@@ -1132,7 +1132,7 @@
    "created": "2026-10-05",
    "updated": "2026-11-11",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "closedOn": "2026-11-11"
   },
@@ -1525,7 +1525,7 @@
    "created": "2026-10-09",
    "updated": "2026-10-29",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119607": {
@@ -1583,7 +1583,7 @@
    "created": "2026-10-12",
    "updated": "2026-11-16",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "dealOn": "2026-11-16",
    "closedOn": "2026-11-16"
@@ -1808,7 +1808,7 @@
    "created": "2026-10-16",
    "updated": "2026-11-11",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "dealOn": "2026-11-10",
    "closedOn": "2026-11-11"
@@ -1868,7 +1868,7 @@
    "created": "2026-10-16",
    "updated": "2026-10-30",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "own": true,
    "officeKey": "haarlem"
@@ -2072,7 +2072,7 @@
    "created": "2026-10-20",
    "updated": "2026-10-28",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119620": {
@@ -2385,7 +2385,7 @@
    "created": "2026-10-28",
    "updated": "2026-11-16",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119625": {
@@ -2470,7 +2470,7 @@
    "created": "2026-10-26",
    "updated": "2026-11-17",
    "firstSeen": "2026-10-29",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "own": true,
    "officeKey": "haarlem"
@@ -2597,7 +2597,7 @@
    "created": "2026-11-02",
    "updated": "2026-11-03",
    "firstSeen": "2026-11-02",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119630": {
@@ -2649,7 +2649,7 @@
    "created": "2026-11-03",
    "updated": "2026-11-14",
    "firstSeen": "2026-11-03",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "dealOn": "2026-11-12",
    "closedOn": "2026-11-14"
@@ -2659,8 +2659,8 @@
    "kind": "rent",
    "own": false,
    "officeKey": "amsterdam",
-   "status": 0,
-   "statusKey": "nieuw",
+   "status": 1,
+   "statusKey": "beschikbaar",
    "active": true,
    "street": "Van Oldenbarneveldtstraat",
    "city": "Amsterdam",
@@ -2721,7 +2721,7 @@
    "created": "2026-11-04",
    "updated": "2026-11-05",
    "firstSeen": "2026-11-04",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119634": {
@@ -2831,7 +2831,7 @@
    "created": "2026-11-08",
    "updated": "2026-11-16",
    "firstSeen": "2026-11-08",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false,
    "dealOn": "2026-11-13",
    "closedOn": "2026-11-16"
@@ -2898,7 +2898,7 @@
    "created": "2026-10-30",
    "updated": "2026-11-17",
    "firstSeen": "2026-11-09",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119638": {
@@ -2982,7 +2982,7 @@
    "created": "2026-11-09",
    "updated": "2026-11-16",
    "firstSeen": "2026-11-09",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119639": {
@@ -3043,7 +3043,7 @@
    "created": "2026-11-09",
    "updated": "2026-11-17",
    "firstSeen": "2026-11-09",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119643": {
@@ -3098,7 +3098,7 @@
    "created": "2026-10-26",
    "updated": "2026-11-17",
    "firstSeen": "2026-11-11",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119644": {
@@ -3190,7 +3190,7 @@
    "created": "2026-11-11",
    "updated": "2026-11-11",
    "firstSeen": "2026-11-11",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119645": {
@@ -3247,7 +3247,7 @@
    "created": "2026-11-09",
    "updated": "2026-11-13",
    "firstSeen": "2026-11-13",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119646": {
@@ -3314,7 +3314,7 @@
    "created": "2026-11-11",
    "updated": "2026-11-13",
    "firstSeen": "2026-11-13",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119647": {
@@ -3386,7 +3386,7 @@
    "created": "2026-11-13",
    "updated": "2026-11-16",
    "firstSeen": "2026-11-14",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119649": {
@@ -3452,7 +3452,7 @@
    "created": "2026-11-02",
    "updated": "2026-11-17",
    "firstSeen": "2026-11-16",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119650": {
@@ -3519,7 +3519,7 @@
    "created": "2026-11-16",
    "updated": "2026-11-17",
    "firstSeen": "2026-11-16",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119651": {
@@ -3571,7 +3571,7 @@
    "created": "2026-11-16",
    "updated": "2026-11-18",
    "firstSeen": "2026-11-17",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   },
   "11119652": {
@@ -3625,9 +3625,9 @@
    "created": "2026-11-17",
    "updated": "2026-11-18",
    "firstSeen": "2026-11-17",
-   "lastSeen": "2026-11-18",
+   "lastSeen": "2026-11-19",
    "withdrawn": false
   }
  },
- "updated": "2026-11-18"
+ "updated": "2026-11-19"
 }
